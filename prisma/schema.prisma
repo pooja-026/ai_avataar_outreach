@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  SENDING
+  SENT
+  ARCHIVED
+}
+
+enum RecipientLinkStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+}
+
+enum AvatarSessionStatus {
+  CREATED
+  CONNECTING
+  ACTIVE
+  ENDED
+  FAILED
+}
+
+enum ConversationRole {
+  SYSTEM
+  USER
+  ASSISTANT
+  TOOL
+}
+
+model AvatarConfiguration {
+  id          String     @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  provider    String     @default("anam")
+  providerKey String?
+  settings    Json?
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  campaigns Campaign[]
+  sessions  AvatarSession[]
+
+  @@index([isActive])
+}
+
+model Campaign {
+  id                    String          @id @default(uuid()) @db.Uuid
+  name                  String
+  subject               String?
+  message               String          @db.Text
+  status                CampaignStatus  @default(DRAFT)
+  defaultContext        Json?
+  avatarConfigurationId String?         @db.Uuid
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  avatarConfiguration AvatarConfiguration? @relation(fields: [avatarConfigurationId], references: [id], onDelete: SetNull)
+  recipients          CampaignRecipient[]
+
+  @@index([status])
+  @@index([avatarConfigurationId])
+}
+
+model Recipient {
+  id        String   @id @default(uuid()) @db.Uuid
+  firstName String?
+  lastName  String?
+  email     String   @unique
+  context   Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaigns CampaignRecipient[]
+}
+
+model CampaignRecipient {
+  id         String   @id @default(uuid()) @db.Uuid
+  campaignId String   @db.Uuid
+  recipientId String  @db.Uuid
+  context    Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  recipient Recipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  links     RecipientLink[]
+  sessions  AvatarSession[]
+
+  @@unique([campaignId, recipientId])
+  @@index([recipientId])
+}
+
+model RecipientLink {
+  id                  String              @id @default(uuid()) @db.Uuid
+  campaignRecipientId String              @db.Uuid
+  token               String              @unique
+  status              RecipientLinkStatus @default(ACTIVE)
+  expiresAt           DateTime?
+  lastOpenedAt        DateTime?
+  revokedAt           DateTime?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  campaignRecipient CampaignRecipient @relation(fields: [campaignRecipientId], references: [id], onDelete: Cascade)
+  sessions          AvatarSession[]
+
+  @@index([campaignRecipientId])
+  @@index([status, expiresAt])
+}
+
+model AvatarSession {
+  id                  String              @id @default(uuid()) @db.Uuid
+  campaignRecipientId String              @db.Uuid
+  recipientLinkId     String?             @db.Uuid
+  avatarConfigurationId String?           @db.Uuid
+  providerSessionId   String?             @unique
+  status              AvatarSessionStatus @default(CREATED)
+  contextSnapshot     Json?
+  startedAt           DateTime?
+  endedAt             DateTime?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  campaignRecipient  CampaignRecipient   @relation(fields: [campaignRecipientId], references: [id], onDelete: Cascade)
+  recipientLink      RecipientLink?      @relation(fields: [recipientLinkId], references: [id], onDelete: SetNull)
+  avatarConfiguration AvatarConfiguration? @relation(fields: [avatarConfigurationId], references: [id], onDelete: SetNull)
+  messages           ConversationMessage[]
+
+  @@index([campaignRecipientId, createdAt])
+  @@index([recipientLinkId])
+  @@index([status])
+}
+
+model ConversationMessage {
+  id        String           @id @default(uuid()) @db.Uuid
+  sessionId String           @db.Uuid
+  sequence  Int
+  role      ConversationRole
+  content   String           @db.Text
+  metadata  Json?
+  createdAt DateTime         @default(now())
+
+  session AvatarSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, sequence])
+  @@index([sessionId, createdAt])
+}
