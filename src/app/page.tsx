@@ -1,8 +1,10 @@
+import Link from "next/link";
+
 const navigation = [
-  { label: "Overview", active: true },
-  { label: "Campaigns", active: false },
-  { label: "Recipients", active: false },
-  { label: "Avatar profiles", active: false },
+  { label: "Overview", href: "/", active: true },
+  { label: "Campaigns", href: "/campaigns", active: false },
+  { label: "Recipients", href: "/recipients", active: false },
+  { label: "Avatar profiles", href: "#", active: false },
 ];
 
 function ArrowUpRightIcon() {
@@ -29,9 +31,9 @@ export default function Home() {
           <nav className="mt-12 space-y-1" aria-label="Primary navigation">
             <p className="px-3 pb-3 text-[11px] font-semibold tracking-[0.12em] text-slate-400 uppercase">Workspace</p>
             {navigation.map((item) => (
-              <button className={`flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-medium transition ${item.active ? "bg-slate-950 text-white shadow-sm" : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"}`} key={item.label} type="button">
+              <Link className={`flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-medium transition ${item.active ? "bg-slate-950 text-white shadow-sm" : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"}`} href={item.href} key={item.label}>
                 {item.label}{item.active && <span className="size-1.5 rounded-full bg-cyan-300" />}
-              </button>
+              </Link>
             ))}
           </nav>
           <div className="mt-auto rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -50,7 +52,7 @@ export default function Home() {
           <div className="mx-auto max-w-6xl py-10">
             <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
               <div><p className="text-xs font-semibold tracking-[0.14em] text-indigo-600 uppercase">Command center</p><h1 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">Outreach, with a human presence.</h1><p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">Create thoughtful campaigns and give every recipient a private, contextual avatar conversation.</p></div>
-              <button className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/15 transition hover:bg-slate-800" type="button"><PlusIcon />New campaign</button>
+              <Link className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-950/15 transition hover:bg-slate-800" href="/campaigns/new"><PlusIcon />New campaign</Link>
             </div>
 
             <section className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Workspace summary">
@@ -62,7 +64,7 @@ export default function Home() {
             <section className="mt-6 grid gap-6 xl:grid-cols-[1.6fr_1fr]">
               <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
                 <div className="flex items-start justify-between gap-4"><div><p className="text-sm font-semibold">Campaign activity</p><p className="mt-1 text-sm text-slate-500">Your outreach timeline will appear here.</p></div><span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">No activity yet</span></div>
-                <div className="mt-10 grid place-items-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 px-6 py-14 text-center"><div className="grid size-12 place-items-center rounded-2xl bg-indigo-100 text-indigo-700">✦</div><h2 className="mt-5 text-lg font-semibold">Begin with a meaningful campaign</h2><p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">Draft the message, add recipients, then create secure links when your campaign is ready.</p><button className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700" type="button">Explore campaign setup <ArrowUpRightIcon /></button></div>
+                <div className="mt-10 grid place-items-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 px-6 py-14 text-center"><div className="grid size-12 place-items-center rounded-2xl bg-indigo-100 text-indigo-700">✦</div><h2 className="mt-5 text-lg font-semibold">Begin with a meaningful campaign</h2><p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">Draft the message, add recipients, then create secure links when your campaign is ready.</p><Link className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700" href="/campaigns/new">Explore campaign setup <ArrowUpRightIcon /></Link></div>
               </article>
               <article className="rounded-2xl bg-slate-950 p-6 text-white shadow-xl shadow-slate-950/15 sm:p-8"><p className="text-xs font-semibold tracking-[0.14em] text-cyan-300 uppercase">Platform principle</p><h2 className="mt-4 text-2xl font-semibold tracking-tight">Every conversation stands on its own.</h2><p className="mt-4 text-sm leading-6 text-slate-300">Campaign content, recipient details, and avatar sessions are intentionally isolated before real-time avatar experiences are introduced.</p><div className="mt-8 space-y-3 border-t border-white/15 pt-5">{["Campaign message", "Recipient context", "Private avatar session"].map((item) => <div className="flex items-center justify-between text-sm" key={item}><span className="text-slate-300">{item}</span><ChevronIcon /></div>)}</div></article>
             </section>

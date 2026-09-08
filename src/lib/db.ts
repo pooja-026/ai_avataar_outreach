@@ -1,15 +1,8 @@
 import { PrismaPg } from "@prisma/adapter-pg";
-
-export type DatabaseClient = {
-  $disconnect(): Promise<void>;
-};
-
-type PrismaClientConstructor = new (options: {
-  adapter: PrismaPg;
-}) => DatabaseClient;
+import { PrismaClient } from "../../generated/prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: DatabaseClient | undefined;
+  prisma: PrismaClient | undefined;
 };
 
 /**
@@ -17,7 +10,7 @@ const globalForPrisma = globalThis as unknown as {
  * lets builds and non-database routes run without a local database connection.
  * `npm run db:generate` creates the typed Prisma module this function loads.
  */
-export async function getDb(): Promise<DatabaseClient> {
+export function getDb(): PrismaClient {
   if (globalForPrisma.prisma) {
     return globalForPrisma.prisma;
   }
@@ -29,10 +22,6 @@ export async function getDb(): Promise<DatabaseClient> {
   }
 
   const adapter = new PrismaPg({ connectionString });
-  const generatedClientModule = "@/generated/prisma/client";
-  const { PrismaClient } = (await import(generatedClientModule)) as {
-    PrismaClient: PrismaClientConstructor;
-  };
   const prisma = new PrismaClient({ adapter });
 
   if (process.env.NODE_ENV !== "production") {
