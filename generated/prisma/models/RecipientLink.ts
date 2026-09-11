@@ -216,6 +216,7 @@ export type RecipientLinkWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"RecipientLink"> | Date | string
   campaignRecipient?: Prisma.XOR<Prisma.CampaignRecipientScalarRelationFilter, Prisma.CampaignRecipientWhereInput>
   sessions?: Prisma.AvatarSessionListRelationFilter
+  deliveries?: Prisma.EmailDeliveryListRelationFilter
 }
 
 export type RecipientLinkOrderByWithRelationInput = {
@@ -230,6 +231,7 @@ export type RecipientLinkOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   campaignRecipient?: Prisma.CampaignRecipientOrderByWithRelationInput
   sessions?: Prisma.AvatarSessionOrderByRelationAggregateInput
+  deliveries?: Prisma.EmailDeliveryOrderByRelationAggregateInput
 }
 
 export type RecipientLinkWhereUniqueInput = Prisma.AtLeast<{
@@ -247,6 +249,7 @@ export type RecipientLinkWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"RecipientLink"> | Date | string
   campaignRecipient?: Prisma.XOR<Prisma.CampaignRecipientScalarRelationFilter, Prisma.CampaignRecipientWhereInput>
   sessions?: Prisma.AvatarSessionListRelationFilter
+  deliveries?: Prisma.EmailDeliveryListRelationFilter
 }, "id" | "token">
 
 export type RecipientLinkOrderByWithAggregationInput = {
@@ -290,6 +293,7 @@ export type RecipientLinkCreateInput = {
   updatedAt?: Date | string
   campaignRecipient: Prisma.CampaignRecipientCreateNestedOneWithoutLinksInput
   sessions?: Prisma.AvatarSessionCreateNestedManyWithoutRecipientLinkInput
+  deliveries?: Prisma.EmailDeliveryCreateNestedManyWithoutRecipientLinkInput
 }
 
 export type RecipientLinkUncheckedCreateInput = {
@@ -303,6 +307,7 @@ export type RecipientLinkUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutRecipientLinkInput
+  deliveries?: Prisma.EmailDeliveryUncheckedCreateNestedManyWithoutRecipientLinkInput
 }
 
 export type RecipientLinkUpdateInput = {
@@ -316,6 +321,7 @@ export type RecipientLinkUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaignRecipient?: Prisma.CampaignRecipientUpdateOneRequiredWithoutLinksNestedInput
   sessions?: Prisma.AvatarSessionUpdateManyWithoutRecipientLinkNestedInput
+  deliveries?: Prisma.EmailDeliveryUpdateManyWithoutRecipientLinkNestedInput
 }
 
 export type RecipientLinkUncheckedUpdateInput = {
@@ -329,6 +335,7 @@ export type RecipientLinkUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutRecipientLinkNestedInput
+  deliveries?: Prisma.EmailDeliveryUncheckedUpdateManyWithoutRecipientLinkNestedInput
 }
 
 export type RecipientLinkCreateManyInput = {
@@ -376,6 +383,11 @@ export type RecipientLinkOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type RecipientLinkNullableScalarRelationFilter = {
+  is?: Prisma.RecipientLinkWhereInput | null
+  isNot?: Prisma.RecipientLinkWhereInput | null
+}
+
 export type RecipientLinkCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   campaignRecipientId?: Prisma.SortOrder
@@ -410,11 +422,6 @@ export type RecipientLinkMinOrderByAggregateInput = {
   revokedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type RecipientLinkNullableScalarRelationFilter = {
-  is?: Prisma.RecipientLinkWhereInput | null
-  isNot?: Prisma.RecipientLinkWhereInput | null
 }
 
 export type RecipientLinkCreateNestedManyWithoutCampaignRecipientInput = {
@@ -459,12 +466,24 @@ export type RecipientLinkUncheckedUpdateManyWithoutCampaignRecipientNestedInput 
   deleteMany?: Prisma.RecipientLinkScalarWhereInput | Prisma.RecipientLinkScalarWhereInput[]
 }
 
-export type EnumRecipientLinkStatusFieldUpdateOperationsInput = {
-  set?: $Enums.RecipientLinkStatus
+export type RecipientLinkCreateNestedOneWithoutDeliveriesInput = {
+  create?: Prisma.XOR<Prisma.RecipientLinkCreateWithoutDeliveriesInput, Prisma.RecipientLinkUncheckedCreateWithoutDeliveriesInput>
+  connectOrCreate?: Prisma.RecipientLinkCreateOrConnectWithoutDeliveriesInput
+  connect?: Prisma.RecipientLinkWhereUniqueInput
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
+export type RecipientLinkUpdateOneWithoutDeliveriesNestedInput = {
+  create?: Prisma.XOR<Prisma.RecipientLinkCreateWithoutDeliveriesInput, Prisma.RecipientLinkUncheckedCreateWithoutDeliveriesInput>
+  connectOrCreate?: Prisma.RecipientLinkCreateOrConnectWithoutDeliveriesInput
+  upsert?: Prisma.RecipientLinkUpsertWithoutDeliveriesInput
+  disconnect?: Prisma.RecipientLinkWhereInput | boolean
+  delete?: Prisma.RecipientLinkWhereInput | boolean
+  connect?: Prisma.RecipientLinkWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RecipientLinkUpdateToOneWithWhereWithoutDeliveriesInput, Prisma.RecipientLinkUpdateWithoutDeliveriesInput>, Prisma.RecipientLinkUncheckedUpdateWithoutDeliveriesInput>
+}
+
+export type EnumRecipientLinkStatusFieldUpdateOperationsInput = {
+  set?: $Enums.RecipientLinkStatus
 }
 
 export type RecipientLinkCreateNestedOneWithoutSessionsInput = {
@@ -493,6 +512,7 @@ export type RecipientLinkCreateWithoutCampaignRecipientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AvatarSessionCreateNestedManyWithoutRecipientLinkInput
+  deliveries?: Prisma.EmailDeliveryCreateNestedManyWithoutRecipientLinkInput
 }
 
 export type RecipientLinkUncheckedCreateWithoutCampaignRecipientInput = {
@@ -505,6 +525,7 @@ export type RecipientLinkUncheckedCreateWithoutCampaignRecipientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutRecipientLinkInput
+  deliveries?: Prisma.EmailDeliveryUncheckedCreateNestedManyWithoutRecipientLinkInput
 }
 
 export type RecipientLinkCreateOrConnectWithoutCampaignRecipientInput = {
@@ -548,6 +569,74 @@ export type RecipientLinkScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"RecipientLink"> | Date | string
 }
 
+export type RecipientLinkCreateWithoutDeliveriesInput = {
+  id?: string
+  token: string
+  status?: $Enums.RecipientLinkStatus
+  expiresAt?: Date | string | null
+  lastOpenedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  campaignRecipient: Prisma.CampaignRecipientCreateNestedOneWithoutLinksInput
+  sessions?: Prisma.AvatarSessionCreateNestedManyWithoutRecipientLinkInput
+}
+
+export type RecipientLinkUncheckedCreateWithoutDeliveriesInput = {
+  id?: string
+  campaignRecipientId: string
+  token: string
+  status?: $Enums.RecipientLinkStatus
+  expiresAt?: Date | string | null
+  lastOpenedAt?: Date | string | null
+  revokedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutRecipientLinkInput
+}
+
+export type RecipientLinkCreateOrConnectWithoutDeliveriesInput = {
+  where: Prisma.RecipientLinkWhereUniqueInput
+  create: Prisma.XOR<Prisma.RecipientLinkCreateWithoutDeliveriesInput, Prisma.RecipientLinkUncheckedCreateWithoutDeliveriesInput>
+}
+
+export type RecipientLinkUpsertWithoutDeliveriesInput = {
+  update: Prisma.XOR<Prisma.RecipientLinkUpdateWithoutDeliveriesInput, Prisma.RecipientLinkUncheckedUpdateWithoutDeliveriesInput>
+  create: Prisma.XOR<Prisma.RecipientLinkCreateWithoutDeliveriesInput, Prisma.RecipientLinkUncheckedCreateWithoutDeliveriesInput>
+  where?: Prisma.RecipientLinkWhereInput
+}
+
+export type RecipientLinkUpdateToOneWithWhereWithoutDeliveriesInput = {
+  where?: Prisma.RecipientLinkWhereInput
+  data: Prisma.XOR<Prisma.RecipientLinkUpdateWithoutDeliveriesInput, Prisma.RecipientLinkUncheckedUpdateWithoutDeliveriesInput>
+}
+
+export type RecipientLinkUpdateWithoutDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  token?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecipientLinkStatusFieldUpdateOperationsInput | $Enums.RecipientLinkStatus
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campaignRecipient?: Prisma.CampaignRecipientUpdateOneRequiredWithoutLinksNestedInput
+  sessions?: Prisma.AvatarSessionUpdateManyWithoutRecipientLinkNestedInput
+}
+
+export type RecipientLinkUncheckedUpdateWithoutDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignRecipientId?: Prisma.StringFieldUpdateOperationsInput | string
+  token?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRecipientLinkStatusFieldUpdateOperationsInput | $Enums.RecipientLinkStatus
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutRecipientLinkNestedInput
+}
+
 export type RecipientLinkCreateWithoutSessionsInput = {
   id?: string
   token: string
@@ -558,6 +647,7 @@ export type RecipientLinkCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   campaignRecipient: Prisma.CampaignRecipientCreateNestedOneWithoutLinksInput
+  deliveries?: Prisma.EmailDeliveryCreateNestedManyWithoutRecipientLinkInput
 }
 
 export type RecipientLinkUncheckedCreateWithoutSessionsInput = {
@@ -570,6 +660,7 @@ export type RecipientLinkUncheckedCreateWithoutSessionsInput = {
   revokedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  deliveries?: Prisma.EmailDeliveryUncheckedCreateNestedManyWithoutRecipientLinkInput
 }
 
 export type RecipientLinkCreateOrConnectWithoutSessionsInput = {
@@ -598,6 +689,7 @@ export type RecipientLinkUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaignRecipient?: Prisma.CampaignRecipientUpdateOneRequiredWithoutLinksNestedInput
+  deliveries?: Prisma.EmailDeliveryUpdateManyWithoutRecipientLinkNestedInput
 }
 
 export type RecipientLinkUncheckedUpdateWithoutSessionsInput = {
@@ -610,6 +702,7 @@ export type RecipientLinkUncheckedUpdateWithoutSessionsInput = {
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveries?: Prisma.EmailDeliveryUncheckedUpdateManyWithoutRecipientLinkNestedInput
 }
 
 export type RecipientLinkCreateManyCampaignRecipientInput = {
@@ -633,6 +726,7 @@ export type RecipientLinkUpdateWithoutCampaignRecipientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AvatarSessionUpdateManyWithoutRecipientLinkNestedInput
+  deliveries?: Prisma.EmailDeliveryUpdateManyWithoutRecipientLinkNestedInput
 }
 
 export type RecipientLinkUncheckedUpdateWithoutCampaignRecipientInput = {
@@ -645,6 +739,7 @@ export type RecipientLinkUncheckedUpdateWithoutCampaignRecipientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutRecipientLinkNestedInput
+  deliveries?: Prisma.EmailDeliveryUncheckedUpdateManyWithoutRecipientLinkNestedInput
 }
 
 export type RecipientLinkUncheckedUpdateManyWithoutCampaignRecipientInput = {
@@ -665,10 +760,12 @@ export type RecipientLinkUncheckedUpdateManyWithoutCampaignRecipientInput = {
 
 export type RecipientLinkCountOutputType = {
   sessions: number
+  deliveries: number
 }
 
 export type RecipientLinkCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | RecipientLinkCountOutputTypeCountSessionsArgs
+  deliveries?: boolean | RecipientLinkCountOutputTypeCountDeliveriesArgs
 }
 
 /**
@@ -688,6 +785,13 @@ export type RecipientLinkCountOutputTypeCountSessionsArgs<ExtArgs extends runtim
   where?: Prisma.AvatarSessionWhereInput
 }
 
+/**
+ * RecipientLinkCountOutputType without action
+ */
+export type RecipientLinkCountOutputTypeCountDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailDeliveryWhereInput
+}
+
 
 export type RecipientLinkSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -701,6 +805,7 @@ export type RecipientLinkSelect<ExtArgs extends runtime.Types.Extensions.Interna
   updatedAt?: boolean
   campaignRecipient?: boolean | Prisma.CampaignRecipientDefaultArgs<ExtArgs>
   sessions?: boolean | Prisma.RecipientLink$sessionsArgs<ExtArgs>
+  deliveries?: boolean | Prisma.RecipientLink$deliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.RecipientLinkCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["recipientLink"]>
 
@@ -746,6 +851,7 @@ export type RecipientLinkOmit<ExtArgs extends runtime.Types.Extensions.InternalA
 export type RecipientLinkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaignRecipient?: boolean | Prisma.CampaignRecipientDefaultArgs<ExtArgs>
   sessions?: boolean | Prisma.RecipientLink$sessionsArgs<ExtArgs>
+  deliveries?: boolean | Prisma.RecipientLink$deliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.RecipientLinkCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RecipientLinkIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -760,6 +866,7 @@ export type $RecipientLinkPayload<ExtArgs extends runtime.Types.Extensions.Inter
   objects: {
     campaignRecipient: Prisma.$CampaignRecipientPayload<ExtArgs>
     sessions: Prisma.$AvatarSessionPayload<ExtArgs>[]
+    deliveries: Prisma.$EmailDeliveryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1167,6 +1274,7 @@ export interface Prisma__RecipientLinkClient<T, Null = never, ExtArgs extends ru
   readonly [Symbol.toStringTag]: "PrismaPromise"
   campaignRecipient<T extends Prisma.CampaignRecipientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignRecipientDefaultArgs<ExtArgs>>): Prisma.Prisma__CampaignRecipientClient<runtime.Types.Result.GetResult<Prisma.$CampaignRecipientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   sessions<T extends Prisma.RecipientLink$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RecipientLink$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AvatarSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deliveries<T extends Prisma.RecipientLink$deliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RecipientLink$deliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1627,6 +1735,30 @@ export type RecipientLink$sessionsArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.AvatarSessionScalarFieldEnum | Prisma.AvatarSessionScalarFieldEnum[]
+}
+
+/**
+ * RecipientLink.deliveries
+ */
+export type RecipientLink$deliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailDelivery
+   */
+  select?: Prisma.EmailDeliverySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailDelivery
+   */
+  omit?: Prisma.EmailDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailDeliveryInclude<ExtArgs> | null
+  where?: Prisma.EmailDeliveryWhereInput
+  orderBy?: Prisma.EmailDeliveryOrderByWithRelationInput | Prisma.EmailDeliveryOrderByWithRelationInput[]
+  cursor?: Prisma.EmailDeliveryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailDeliveryScalarFieldEnum | Prisma.EmailDeliveryScalarFieldEnum[]
 }
 
 /**

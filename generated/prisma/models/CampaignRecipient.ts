@@ -190,6 +190,7 @@ export type CampaignRecipientWhereInput = {
   recipient?: Prisma.XOR<Prisma.RecipientScalarRelationFilter, Prisma.RecipientWhereInput>
   links?: Prisma.RecipientLinkListRelationFilter
   sessions?: Prisma.AvatarSessionListRelationFilter
+  deliveries?: Prisma.EmailDeliveryListRelationFilter
 }
 
 export type CampaignRecipientOrderByWithRelationInput = {
@@ -203,6 +204,7 @@ export type CampaignRecipientOrderByWithRelationInput = {
   recipient?: Prisma.RecipientOrderByWithRelationInput
   links?: Prisma.RecipientLinkOrderByRelationAggregateInput
   sessions?: Prisma.AvatarSessionOrderByRelationAggregateInput
+  deliveries?: Prisma.EmailDeliveryOrderByRelationAggregateInput
 }
 
 export type CampaignRecipientWhereUniqueInput = Prisma.AtLeast<{
@@ -220,6 +222,7 @@ export type CampaignRecipientWhereUniqueInput = Prisma.AtLeast<{
   recipient?: Prisma.XOR<Prisma.RecipientScalarRelationFilter, Prisma.RecipientWhereInput>
   links?: Prisma.RecipientLinkListRelationFilter
   sessions?: Prisma.AvatarSessionListRelationFilter
+  deliveries?: Prisma.EmailDeliveryListRelationFilter
 }, "id" | "campaignId_recipientId">
 
 export type CampaignRecipientOrderByWithAggregationInput = {
@@ -255,6 +258,7 @@ export type CampaignRecipientCreateInput = {
   recipient: Prisma.RecipientCreateNestedOneWithoutCampaignsInput
   links?: Prisma.RecipientLinkCreateNestedManyWithoutCampaignRecipientInput
   sessions?: Prisma.AvatarSessionCreateNestedManyWithoutCampaignRecipientInput
+  deliveries?: Prisma.EmailDeliveryCreateNestedManyWithoutCampaignRecipientInput
 }
 
 export type CampaignRecipientUncheckedCreateInput = {
@@ -266,6 +270,7 @@ export type CampaignRecipientUncheckedCreateInput = {
   updatedAt?: Date | string
   links?: Prisma.RecipientLinkUncheckedCreateNestedManyWithoutCampaignRecipientInput
   sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutCampaignRecipientInput
+  deliveries?: Prisma.EmailDeliveryUncheckedCreateNestedManyWithoutCampaignRecipientInput
 }
 
 export type CampaignRecipientUpdateInput = {
@@ -277,6 +282,7 @@ export type CampaignRecipientUpdateInput = {
   recipient?: Prisma.RecipientUpdateOneRequiredWithoutCampaignsNestedInput
   links?: Prisma.RecipientLinkUpdateManyWithoutCampaignRecipientNestedInput
   sessions?: Prisma.AvatarSessionUpdateManyWithoutCampaignRecipientNestedInput
+  deliveries?: Prisma.EmailDeliveryUpdateManyWithoutCampaignRecipientNestedInput
 }
 
 export type CampaignRecipientUncheckedUpdateInput = {
@@ -288,6 +294,7 @@ export type CampaignRecipientUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   links?: Prisma.RecipientLinkUncheckedUpdateManyWithoutCampaignRecipientNestedInput
   sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutCampaignRecipientNestedInput
+  deliveries?: Prisma.EmailDeliveryUncheckedUpdateManyWithoutCampaignRecipientNestedInput
 }
 
 export type CampaignRecipientCreateManyInput = {
@@ -444,6 +451,20 @@ export type CampaignRecipientUncheckedUpdateManyWithoutRecipientNestedInput = {
   deleteMany?: Prisma.CampaignRecipientScalarWhereInput | Prisma.CampaignRecipientScalarWhereInput[]
 }
 
+export type CampaignRecipientCreateNestedOneWithoutDeliveriesInput = {
+  create?: Prisma.XOR<Prisma.CampaignRecipientCreateWithoutDeliveriesInput, Prisma.CampaignRecipientUncheckedCreateWithoutDeliveriesInput>
+  connectOrCreate?: Prisma.CampaignRecipientCreateOrConnectWithoutDeliveriesInput
+  connect?: Prisma.CampaignRecipientWhereUniqueInput
+}
+
+export type CampaignRecipientUpdateOneRequiredWithoutDeliveriesNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignRecipientCreateWithoutDeliveriesInput, Prisma.CampaignRecipientUncheckedCreateWithoutDeliveriesInput>
+  connectOrCreate?: Prisma.CampaignRecipientCreateOrConnectWithoutDeliveriesInput
+  upsert?: Prisma.CampaignRecipientUpsertWithoutDeliveriesInput
+  connect?: Prisma.CampaignRecipientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignRecipientUpdateToOneWithWhereWithoutDeliveriesInput, Prisma.CampaignRecipientUpdateWithoutDeliveriesInput>, Prisma.CampaignRecipientUncheckedUpdateWithoutDeliveriesInput>
+}
+
 export type CampaignRecipientCreateNestedOneWithoutLinksInput = {
   create?: Prisma.XOR<Prisma.CampaignRecipientCreateWithoutLinksInput, Prisma.CampaignRecipientUncheckedCreateWithoutLinksInput>
   connectOrCreate?: Prisma.CampaignRecipientCreateOrConnectWithoutLinksInput
@@ -480,6 +501,7 @@ export type CampaignRecipientCreateWithoutCampaignInput = {
   recipient: Prisma.RecipientCreateNestedOneWithoutCampaignsInput
   links?: Prisma.RecipientLinkCreateNestedManyWithoutCampaignRecipientInput
   sessions?: Prisma.AvatarSessionCreateNestedManyWithoutCampaignRecipientInput
+  deliveries?: Prisma.EmailDeliveryCreateNestedManyWithoutCampaignRecipientInput
 }
 
 export type CampaignRecipientUncheckedCreateWithoutCampaignInput = {
@@ -490,6 +512,7 @@ export type CampaignRecipientUncheckedCreateWithoutCampaignInput = {
   updatedAt?: Date | string
   links?: Prisma.RecipientLinkUncheckedCreateNestedManyWithoutCampaignRecipientInput
   sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutCampaignRecipientInput
+  deliveries?: Prisma.EmailDeliveryUncheckedCreateNestedManyWithoutCampaignRecipientInput
 }
 
 export type CampaignRecipientCreateOrConnectWithoutCampaignInput = {
@@ -538,6 +561,7 @@ export type CampaignRecipientCreateWithoutRecipientInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutRecipientsInput
   links?: Prisma.RecipientLinkCreateNestedManyWithoutCampaignRecipientInput
   sessions?: Prisma.AvatarSessionCreateNestedManyWithoutCampaignRecipientInput
+  deliveries?: Prisma.EmailDeliveryCreateNestedManyWithoutCampaignRecipientInput
 }
 
 export type CampaignRecipientUncheckedCreateWithoutRecipientInput = {
@@ -548,6 +572,7 @@ export type CampaignRecipientUncheckedCreateWithoutRecipientInput = {
   updatedAt?: Date | string
   links?: Prisma.RecipientLinkUncheckedCreateNestedManyWithoutCampaignRecipientInput
   sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutCampaignRecipientInput
+  deliveries?: Prisma.EmailDeliveryUncheckedCreateNestedManyWithoutCampaignRecipientInput
 }
 
 export type CampaignRecipientCreateOrConnectWithoutRecipientInput = {
@@ -576,6 +601,66 @@ export type CampaignRecipientUpdateManyWithWhereWithoutRecipientInput = {
   data: Prisma.XOR<Prisma.CampaignRecipientUpdateManyMutationInput, Prisma.CampaignRecipientUncheckedUpdateManyWithoutRecipientInput>
 }
 
+export type CampaignRecipientCreateWithoutDeliveriesInput = {
+  id?: string
+  context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  campaign: Prisma.CampaignCreateNestedOneWithoutRecipientsInput
+  recipient: Prisma.RecipientCreateNestedOneWithoutCampaignsInput
+  links?: Prisma.RecipientLinkCreateNestedManyWithoutCampaignRecipientInput
+  sessions?: Prisma.AvatarSessionCreateNestedManyWithoutCampaignRecipientInput
+}
+
+export type CampaignRecipientUncheckedCreateWithoutDeliveriesInput = {
+  id?: string
+  campaignId: string
+  recipientId: string
+  context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  links?: Prisma.RecipientLinkUncheckedCreateNestedManyWithoutCampaignRecipientInput
+  sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutCampaignRecipientInput
+}
+
+export type CampaignRecipientCreateOrConnectWithoutDeliveriesInput = {
+  where: Prisma.CampaignRecipientWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignRecipientCreateWithoutDeliveriesInput, Prisma.CampaignRecipientUncheckedCreateWithoutDeliveriesInput>
+}
+
+export type CampaignRecipientUpsertWithoutDeliveriesInput = {
+  update: Prisma.XOR<Prisma.CampaignRecipientUpdateWithoutDeliveriesInput, Prisma.CampaignRecipientUncheckedUpdateWithoutDeliveriesInput>
+  create: Prisma.XOR<Prisma.CampaignRecipientCreateWithoutDeliveriesInput, Prisma.CampaignRecipientUncheckedCreateWithoutDeliveriesInput>
+  where?: Prisma.CampaignRecipientWhereInput
+}
+
+export type CampaignRecipientUpdateToOneWithWhereWithoutDeliveriesInput = {
+  where?: Prisma.CampaignRecipientWhereInput
+  data: Prisma.XOR<Prisma.CampaignRecipientUpdateWithoutDeliveriesInput, Prisma.CampaignRecipientUncheckedUpdateWithoutDeliveriesInput>
+}
+
+export type CampaignRecipientUpdateWithoutDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  campaign?: Prisma.CampaignUpdateOneRequiredWithoutRecipientsNestedInput
+  recipient?: Prisma.RecipientUpdateOneRequiredWithoutCampaignsNestedInput
+  links?: Prisma.RecipientLinkUpdateManyWithoutCampaignRecipientNestedInput
+  sessions?: Prisma.AvatarSessionUpdateManyWithoutCampaignRecipientNestedInput
+}
+
+export type CampaignRecipientUncheckedUpdateWithoutDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  campaignId?: Prisma.StringFieldUpdateOperationsInput | string
+  recipientId?: Prisma.StringFieldUpdateOperationsInput | string
+  context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  links?: Prisma.RecipientLinkUncheckedUpdateManyWithoutCampaignRecipientNestedInput
+  sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutCampaignRecipientNestedInput
+}
+
 export type CampaignRecipientCreateWithoutLinksInput = {
   id?: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
@@ -584,6 +669,7 @@ export type CampaignRecipientCreateWithoutLinksInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutRecipientsInput
   recipient: Prisma.RecipientCreateNestedOneWithoutCampaignsInput
   sessions?: Prisma.AvatarSessionCreateNestedManyWithoutCampaignRecipientInput
+  deliveries?: Prisma.EmailDeliveryCreateNestedManyWithoutCampaignRecipientInput
 }
 
 export type CampaignRecipientUncheckedCreateWithoutLinksInput = {
@@ -594,6 +680,7 @@ export type CampaignRecipientUncheckedCreateWithoutLinksInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutCampaignRecipientInput
+  deliveries?: Prisma.EmailDeliveryUncheckedCreateNestedManyWithoutCampaignRecipientInput
 }
 
 export type CampaignRecipientCreateOrConnectWithoutLinksInput = {
@@ -620,6 +707,7 @@ export type CampaignRecipientUpdateWithoutLinksInput = {
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutRecipientsNestedInput
   recipient?: Prisma.RecipientUpdateOneRequiredWithoutCampaignsNestedInput
   sessions?: Prisma.AvatarSessionUpdateManyWithoutCampaignRecipientNestedInput
+  deliveries?: Prisma.EmailDeliveryUpdateManyWithoutCampaignRecipientNestedInput
 }
 
 export type CampaignRecipientUncheckedUpdateWithoutLinksInput = {
@@ -630,6 +718,7 @@ export type CampaignRecipientUncheckedUpdateWithoutLinksInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutCampaignRecipientNestedInput
+  deliveries?: Prisma.EmailDeliveryUncheckedUpdateManyWithoutCampaignRecipientNestedInput
 }
 
 export type CampaignRecipientCreateWithoutSessionsInput = {
@@ -640,6 +729,7 @@ export type CampaignRecipientCreateWithoutSessionsInput = {
   campaign: Prisma.CampaignCreateNestedOneWithoutRecipientsInput
   recipient: Prisma.RecipientCreateNestedOneWithoutCampaignsInput
   links?: Prisma.RecipientLinkCreateNestedManyWithoutCampaignRecipientInput
+  deliveries?: Prisma.EmailDeliveryCreateNestedManyWithoutCampaignRecipientInput
 }
 
 export type CampaignRecipientUncheckedCreateWithoutSessionsInput = {
@@ -650,6 +740,7 @@ export type CampaignRecipientUncheckedCreateWithoutSessionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   links?: Prisma.RecipientLinkUncheckedCreateNestedManyWithoutCampaignRecipientInput
+  deliveries?: Prisma.EmailDeliveryUncheckedCreateNestedManyWithoutCampaignRecipientInput
 }
 
 export type CampaignRecipientCreateOrConnectWithoutSessionsInput = {
@@ -676,6 +767,7 @@ export type CampaignRecipientUpdateWithoutSessionsInput = {
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutRecipientsNestedInput
   recipient?: Prisma.RecipientUpdateOneRequiredWithoutCampaignsNestedInput
   links?: Prisma.RecipientLinkUpdateManyWithoutCampaignRecipientNestedInput
+  deliveries?: Prisma.EmailDeliveryUpdateManyWithoutCampaignRecipientNestedInput
 }
 
 export type CampaignRecipientUncheckedUpdateWithoutSessionsInput = {
@@ -686,6 +778,7 @@ export type CampaignRecipientUncheckedUpdateWithoutSessionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   links?: Prisma.RecipientLinkUncheckedUpdateManyWithoutCampaignRecipientNestedInput
+  deliveries?: Prisma.EmailDeliveryUncheckedUpdateManyWithoutCampaignRecipientNestedInput
 }
 
 export type CampaignRecipientCreateManyCampaignInput = {
@@ -704,6 +797,7 @@ export type CampaignRecipientUpdateWithoutCampaignInput = {
   recipient?: Prisma.RecipientUpdateOneRequiredWithoutCampaignsNestedInput
   links?: Prisma.RecipientLinkUpdateManyWithoutCampaignRecipientNestedInput
   sessions?: Prisma.AvatarSessionUpdateManyWithoutCampaignRecipientNestedInput
+  deliveries?: Prisma.EmailDeliveryUpdateManyWithoutCampaignRecipientNestedInput
 }
 
 export type CampaignRecipientUncheckedUpdateWithoutCampaignInput = {
@@ -714,6 +808,7 @@ export type CampaignRecipientUncheckedUpdateWithoutCampaignInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   links?: Prisma.RecipientLinkUncheckedUpdateManyWithoutCampaignRecipientNestedInput
   sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutCampaignRecipientNestedInput
+  deliveries?: Prisma.EmailDeliveryUncheckedUpdateManyWithoutCampaignRecipientNestedInput
 }
 
 export type CampaignRecipientUncheckedUpdateManyWithoutCampaignInput = {
@@ -740,6 +835,7 @@ export type CampaignRecipientUpdateWithoutRecipientInput = {
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutRecipientsNestedInput
   links?: Prisma.RecipientLinkUpdateManyWithoutCampaignRecipientNestedInput
   sessions?: Prisma.AvatarSessionUpdateManyWithoutCampaignRecipientNestedInput
+  deliveries?: Prisma.EmailDeliveryUpdateManyWithoutCampaignRecipientNestedInput
 }
 
 export type CampaignRecipientUncheckedUpdateWithoutRecipientInput = {
@@ -750,6 +846,7 @@ export type CampaignRecipientUncheckedUpdateWithoutRecipientInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   links?: Prisma.RecipientLinkUncheckedUpdateManyWithoutCampaignRecipientNestedInput
   sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutCampaignRecipientNestedInput
+  deliveries?: Prisma.EmailDeliveryUncheckedUpdateManyWithoutCampaignRecipientNestedInput
 }
 
 export type CampaignRecipientUncheckedUpdateManyWithoutRecipientInput = {
@@ -768,11 +865,13 @@ export type CampaignRecipientUncheckedUpdateManyWithoutRecipientInput = {
 export type CampaignRecipientCountOutputType = {
   links: number
   sessions: number
+  deliveries: number
 }
 
 export type CampaignRecipientCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   links?: boolean | CampaignRecipientCountOutputTypeCountLinksArgs
   sessions?: boolean | CampaignRecipientCountOutputTypeCountSessionsArgs
+  deliveries?: boolean | CampaignRecipientCountOutputTypeCountDeliveriesArgs
 }
 
 /**
@@ -799,6 +898,13 @@ export type CampaignRecipientCountOutputTypeCountSessionsArgs<ExtArgs extends ru
   where?: Prisma.AvatarSessionWhereInput
 }
 
+/**
+ * CampaignRecipientCountOutputType without action
+ */
+export type CampaignRecipientCountOutputTypeCountDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailDeliveryWhereInput
+}
+
 
 export type CampaignRecipientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -811,6 +917,7 @@ export type CampaignRecipientSelect<ExtArgs extends runtime.Types.Extensions.Int
   recipient?: boolean | Prisma.RecipientDefaultArgs<ExtArgs>
   links?: boolean | Prisma.CampaignRecipient$linksArgs<ExtArgs>
   sessions?: boolean | Prisma.CampaignRecipient$sessionsArgs<ExtArgs>
+  deliveries?: boolean | Prisma.CampaignRecipient$deliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignRecipientCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["campaignRecipient"]>
 
@@ -851,6 +958,7 @@ export type CampaignRecipientInclude<ExtArgs extends runtime.Types.Extensions.In
   recipient?: boolean | Prisma.RecipientDefaultArgs<ExtArgs>
   links?: boolean | Prisma.CampaignRecipient$linksArgs<ExtArgs>
   sessions?: boolean | Prisma.CampaignRecipient$sessionsArgs<ExtArgs>
+  deliveries?: boolean | Prisma.CampaignRecipient$deliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignRecipientCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CampaignRecipientIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -869,6 +977,7 @@ export type $CampaignRecipientPayload<ExtArgs extends runtime.Types.Extensions.I
     recipient: Prisma.$RecipientPayload<ExtArgs>
     links: Prisma.$RecipientLinkPayload<ExtArgs>[]
     sessions: Prisma.$AvatarSessionPayload<ExtArgs>[]
+    deliveries: Prisma.$EmailDeliveryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1275,6 +1384,7 @@ export interface Prisma__CampaignRecipientClient<T, Null = never, ExtArgs extend
   recipient<T extends Prisma.RecipientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RecipientDefaultArgs<ExtArgs>>): Prisma.Prisma__RecipientClient<runtime.Types.Result.GetResult<Prisma.$RecipientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   links<T extends Prisma.CampaignRecipient$linksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignRecipient$linksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RecipientLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.CampaignRecipient$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignRecipient$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AvatarSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deliveries<T extends Prisma.CampaignRecipient$deliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignRecipient$deliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailDeliveryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1756,6 +1866,30 @@ export type CampaignRecipient$sessionsArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.AvatarSessionScalarFieldEnum | Prisma.AvatarSessionScalarFieldEnum[]
+}
+
+/**
+ * CampaignRecipient.deliveries
+ */
+export type CampaignRecipient$deliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailDelivery
+   */
+  select?: Prisma.EmailDeliverySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailDelivery
+   */
+  omit?: Prisma.EmailDeliveryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailDeliveryInclude<ExtArgs> | null
+  where?: Prisma.EmailDeliveryWhereInput
+  orderBy?: Prisma.EmailDeliveryOrderByWithRelationInput | Prisma.EmailDeliveryOrderByWithRelationInput[]
+  cursor?: Prisma.EmailDeliveryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailDeliveryScalarFieldEnum | Prisma.EmailDeliveryScalarFieldEnum[]
 }
 
 /**

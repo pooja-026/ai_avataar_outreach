@@ -245,11 +245,11 @@ export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedStringNullableFilter<$PrismaModel>
 }
 
-export type EnumRecipientLinkStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.RecipientLinkStatus | Prisma.EnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel> | $Enums.RecipientLinkStatus
+export type EnumEmailDeliveryStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailDeliveryStatus | Prisma.EnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailDeliveryStatus[] | Prisma.ListEnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailDeliveryStatus[] | Prisma.ListEnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailDeliveryStatusFilter<$PrismaModel> | $Enums.EmailDeliveryStatus
 }
 
 export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -263,14 +263,14 @@ export type DateTimeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
 }
 
-export type EnumRecipientLinkStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.RecipientLinkStatus | Prisma.EnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumRecipientLinkStatusWithAggregatesFilter<$PrismaModel> | $Enums.RecipientLinkStatus
+export type EnumEmailDeliveryStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailDeliveryStatus | Prisma.EnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailDeliveryStatus[] | Prisma.ListEnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailDeliveryStatus[] | Prisma.ListEnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailDeliveryStatusWithAggregatesFilter<$PrismaModel> | $Enums.EmailDeliveryStatus
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmailDeliveryStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmailDeliveryStatusFilter<$PrismaModel>
 }
 
 export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -285,6 +285,23 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type EnumRecipientLinkStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.RecipientLinkStatus | Prisma.EnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel> | $Enums.RecipientLinkStatus
+}
+
+export type EnumRecipientLinkStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RecipientLinkStatus | Prisma.EnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRecipientLinkStatusWithAggregatesFilter<$PrismaModel> | $Enums.RecipientLinkStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel>
 }
 
 export type EnumAvatarSessionStatusFilter<$PrismaModel = never> = {
@@ -561,11 +578,11 @@ export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedStringNullableFilter<$PrismaModel>
 }
 
-export type NestedEnumRecipientLinkStatusFilter<$PrismaModel = never> = {
-  equals?: $Enums.RecipientLinkStatus | Prisma.EnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel> | $Enums.RecipientLinkStatus
+export type NestedEnumEmailDeliveryStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailDeliveryStatus | Prisma.EnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailDeliveryStatus[] | Prisma.ListEnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailDeliveryStatus[] | Prisma.ListEnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailDeliveryStatusFilter<$PrismaModel> | $Enums.EmailDeliveryStatus
 }
 
 export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -579,14 +596,14 @@ export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
 }
 
-export type NestedEnumRecipientLinkStatusWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.RecipientLinkStatus | Prisma.EnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  in?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  notIn?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumRecipientLinkStatusWithAggregatesFilter<$PrismaModel> | $Enums.RecipientLinkStatus
+export type NestedEnumEmailDeliveryStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.EmailDeliveryStatus | Prisma.EnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.EmailDeliveryStatus[] | Prisma.ListEnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.EmailDeliveryStatus[] | Prisma.ListEnumEmailDeliveryStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumEmailDeliveryStatusWithAggregatesFilter<$PrismaModel> | $Enums.EmailDeliveryStatus
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumEmailDeliveryStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumEmailDeliveryStatusFilter<$PrismaModel>
 }
 
 export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -601,6 +618,23 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumRecipientLinkStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.RecipientLinkStatus | Prisma.EnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel> | $Enums.RecipientLinkStatus
+}
+
+export type NestedEnumRecipientLinkStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.RecipientLinkStatus | Prisma.EnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.RecipientLinkStatus[] | Prisma.ListEnumRecipientLinkStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumRecipientLinkStatusWithAggregatesFilter<$PrismaModel> | $Enums.RecipientLinkStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumRecipientLinkStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumAvatarSessionStatusFilter<$PrismaModel = never> = {
