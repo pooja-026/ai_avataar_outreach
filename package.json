@@ -13,6 +13,7 @@
     "db:deploy": "prisma migrate deploy"
   },
   "dependencies": {
+    "@anam-ai/js-sdk": "^4.27.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "dotenv": "^17.4.2",
