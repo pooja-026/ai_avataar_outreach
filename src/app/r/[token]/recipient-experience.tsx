@@ -1,6 +1,6 @@
 "use client";
 
-import { createClient } from "@anam-ai/js-sdk";
+import { AnamEvent, createClient } from "@anam-ai/js-sdk";
 import { useRef, useState } from "react";
 
 type Props = { firstName: string | null; campaignName: string; message: string; token: string };
@@ -12,7 +12,27 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
   const [error, setError] = useState("");
   const clientRef = useRef<ReturnType<typeof createClient> | null>(null);
   const audioRef = useRef<MediaStream | null>(null);
+  const sessionIdRef = useRef<string | null>(null);
+  const providerSessionIdRef = useRef<string | null>(null);
+  const messageHistoryRef = useRef<Array<{ role: string; content: string }>>([]);
+  const syncTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const greeting = firstName ? `Welcome, ${firstName}` : "Welcome";
+
+  async function saveConversation(ended = false) {
+    const sessionId = sessionIdRef.current;
+    if (!sessionId || !messageHistoryRef.current.length) return;
+
+    await fetch(`/api/recipient-links/${encodeURIComponent(token)}/sessions/${encodeURIComponent(sessionId)}/messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: messageHistoryRef.current, ended, providerSessionId: providerSessionIdRef.current }),
+    });
+  }
+
+  function scheduleConversationSave() {
+    if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
+    syncTimerRef.current = setTimeout(() => { void saveConversation(); }, 600);
+  }
 
   async function startConversation() {
     setState("connecting"); setError("");
@@ -22,8 +42,18 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
       const response = await fetch(`/api/recipient-links/${encodeURIComponent(token)}/avatar-session`, { method: "POST" });
       const body: unknown = await response.json();
       if (!response.ok || !body || typeof body !== "object" || !("sessionToken" in body) || typeof body.sessionToken !== "string") throw new Error("Unable to create your private avatar session.");
+      if (!("sessionId" in body) || typeof body.sessionId !== "string") throw new Error("Unable to create your private avatar session.");
+      sessionIdRef.current = body.sessionId;
+      providerSessionIdRef.current = null;
+      messageHistoryRef.current = [];
       const client = createClient(body.sessionToken);
       clientRef.current = client;
+      client.addListener(AnamEvent.SESSION_READY, (providerSessionId: string) => { providerSessionIdRef.current = providerSessionId; });
+      client.addListener(AnamEvent.MESSAGE_HISTORY_UPDATED, (messages) => {
+        messageHistoryRef.current = messages.map((message) => ({ role: message.role, content: message.content })).filter((message) => (message.role === "user" || message.role === "persona") && Boolean(message.content?.trim()));
+        scheduleConversationSave();
+      });
+      client.addListener(AnamEvent.CONNECTION_CLOSED, () => { void saveConversation(true); });
       await client.streamToVideoElement("anam-avatar-video", audio);
       setState("live");
     } catch (cause) {
@@ -34,8 +64,11 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
   }
 
   async function stopConversation() {
+    if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
+    await saveConversation(true);
     await clientRef.current?.stopStreaming(); clientRef.current = null;
     audioRef.current?.getTracks().forEach((track) => track.stop()); audioRef.current = null;
+    sessionIdRef.current = null;
     setState("welcome");
   }
 

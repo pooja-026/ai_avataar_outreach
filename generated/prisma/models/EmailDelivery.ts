@@ -453,10 +453,6 @@ export type EnumEmailDeliveryStatusFieldUpdateOperationsInput = {
   set?: $Enums.EmailDeliveryStatus
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type EmailDeliveryCreateNestedManyWithoutRecipientLinkInput = {
   create?: Prisma.XOR<Prisma.EmailDeliveryCreateWithoutRecipientLinkInput, Prisma.EmailDeliveryUncheckedCreateWithoutRecipientLinkInput> | Prisma.EmailDeliveryCreateWithoutRecipientLinkInput[] | Prisma.EmailDeliveryUncheckedCreateWithoutRecipientLinkInput[]
   connectOrCreate?: Prisma.EmailDeliveryCreateOrConnectWithoutRecipientLinkInput | Prisma.EmailDeliveryCreateOrConnectWithoutRecipientLinkInput[]

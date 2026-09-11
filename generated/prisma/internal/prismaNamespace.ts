@@ -1091,6 +1091,8 @@ export const RecipientScalarFieldEnum = {
   lastName: 'lastName',
   email: 'email',
   context: 'context',
+  conversationSummary: 'conversationSummary',
+  lastConversationAt: 'lastConversationAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1103,6 +1105,8 @@ export const CampaignRecipientScalarFieldEnum = {
   campaignId: 'campaignId',
   recipientId: 'recipientId',
   context: 'context',
+  conversationSummary: 'conversationSummary',
+  lastConversationAt: 'lastConversationAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

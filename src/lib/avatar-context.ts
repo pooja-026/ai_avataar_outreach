@@ -12,7 +12,7 @@ function notes(value: ContextValue) {
 export function buildAvatarContext(input: {
   campaign: { name: string; message: string; defaultContext: ContextValue };
   recipient: { firstName: string | null; lastName: string | null; email: string; context: ContextValue };
-  campaignRecipient: { context: ContextValue };
+  campaignRecipient: { context: ContextValue; conversationSummary?: string | null };
 }) {
   const recipientName = [input.recipient.firstName, input.recipient.lastName].filter(Boolean).join(" ") || input.recipient.email;
   const campaignNotes = notes(input.campaign.defaultContext);
@@ -28,7 +28,9 @@ export function buildAvatarContext(input: {
     campaignNotes ? `CAMPAIGN CONTEXT: ${campaignNotes}` : null,
     recipientNotes ? `RECIPIENT CONTEXT: ${recipientNotes}` : null,
     campaignRecipientNotes ? `CAMPAIGN-SPECIFIC CONTEXT: ${campaignRecipientNotes}` : null,
-    "PRIOR CONVERSATION SUMMARY: Not available yet. Do not invent one.",
+    input.campaignRecipient.conversationSummary
+      ? `PRIOR CONVERSATION RECAP: ${input.campaignRecipient.conversationSummary}`
+      : "PRIOR CONVERSATION RECAP: No previous conversation has been recorded. Do not invent one.",
   ].filter(Boolean).join("\n\n");
 
   return { prompt, recipientName, campaignNotes, recipientNotes, campaignRecipientNotes };
