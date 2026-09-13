@@ -50,6 +50,7 @@ export type CampaignRecipientCountAggregateOutputType = {
   recipientId: number
   context: number
   conversationSummary: number
+  conversationInsights: number
   lastConversationAt: number
   createdAt: number
   updatedAt: number
@@ -83,6 +84,7 @@ export type CampaignRecipientCountAggregateInputType = {
   recipientId?: true
   context?: true
   conversationSummary?: true
+  conversationInsights?: true
   lastConversationAt?: true
   createdAt?: true
   updatedAt?: true
@@ -167,6 +169,7 @@ export type CampaignRecipientGroupByOutputType = {
   recipientId: string
   context: runtime.JsonValue | null
   conversationSummary: string | null
+  conversationInsights: runtime.JsonValue | null
   lastConversationAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -199,6 +202,7 @@ export type CampaignRecipientWhereInput = {
   recipientId?: Prisma.UuidFilter<"CampaignRecipient"> | string
   context?: Prisma.JsonNullableFilter<"CampaignRecipient">
   conversationSummary?: Prisma.StringNullableFilter<"CampaignRecipient"> | string | null
+  conversationInsights?: Prisma.JsonNullableFilter<"CampaignRecipient">
   lastConversationAt?: Prisma.DateTimeNullableFilter<"CampaignRecipient"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"CampaignRecipient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CampaignRecipient"> | Date | string
@@ -215,6 +219,7 @@ export type CampaignRecipientOrderByWithRelationInput = {
   recipientId?: Prisma.SortOrder
   context?: Prisma.SortOrderInput | Prisma.SortOrder
   conversationSummary?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversationInsights?: Prisma.SortOrderInput | Prisma.SortOrder
   lastConversationAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -235,6 +240,7 @@ export type CampaignRecipientWhereUniqueInput = Prisma.AtLeast<{
   recipientId?: Prisma.UuidFilter<"CampaignRecipient"> | string
   context?: Prisma.JsonNullableFilter<"CampaignRecipient">
   conversationSummary?: Prisma.StringNullableFilter<"CampaignRecipient"> | string | null
+  conversationInsights?: Prisma.JsonNullableFilter<"CampaignRecipient">
   lastConversationAt?: Prisma.DateTimeNullableFilter<"CampaignRecipient"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"CampaignRecipient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CampaignRecipient"> | Date | string
@@ -251,6 +257,7 @@ export type CampaignRecipientOrderByWithAggregationInput = {
   recipientId?: Prisma.SortOrder
   context?: Prisma.SortOrderInput | Prisma.SortOrder
   conversationSummary?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversationInsights?: Prisma.SortOrderInput | Prisma.SortOrder
   lastConversationAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -268,6 +275,7 @@ export type CampaignRecipientScalarWhereWithAggregatesInput = {
   recipientId?: Prisma.UuidWithAggregatesFilter<"CampaignRecipient"> | string
   context?: Prisma.JsonNullableWithAggregatesFilter<"CampaignRecipient">
   conversationSummary?: Prisma.StringNullableWithAggregatesFilter<"CampaignRecipient"> | string | null
+  conversationInsights?: Prisma.JsonNullableWithAggregatesFilter<"CampaignRecipient">
   lastConversationAt?: Prisma.DateTimeNullableWithAggregatesFilter<"CampaignRecipient"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CampaignRecipient"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CampaignRecipient"> | Date | string
@@ -277,6 +285,7 @@ export type CampaignRecipientCreateInput = {
   id?: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -293,6 +302,7 @@ export type CampaignRecipientUncheckedCreateInput = {
   recipientId: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -305,6 +315,7 @@ export type CampaignRecipientUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -321,6 +332,7 @@ export type CampaignRecipientUncheckedUpdateInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -335,6 +347,7 @@ export type CampaignRecipientCreateManyInput = {
   recipientId: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -344,6 +357,7 @@ export type CampaignRecipientUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -355,6 +369,7 @@ export type CampaignRecipientUncheckedUpdateManyInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -381,6 +396,7 @@ export type CampaignRecipientCountOrderByAggregateInput = {
   recipientId?: Prisma.SortOrder
   context?: Prisma.SortOrder
   conversationSummary?: Prisma.SortOrder
+  conversationInsights?: Prisma.SortOrder
   lastConversationAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -541,6 +557,7 @@ export type CampaignRecipientCreateWithoutCampaignInput = {
   id?: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -555,6 +572,7 @@ export type CampaignRecipientUncheckedCreateWithoutCampaignInput = {
   recipientId: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -598,6 +616,7 @@ export type CampaignRecipientScalarWhereInput = {
   recipientId?: Prisma.UuidFilter<"CampaignRecipient"> | string
   context?: Prisma.JsonNullableFilter<"CampaignRecipient">
   conversationSummary?: Prisma.StringNullableFilter<"CampaignRecipient"> | string | null
+  conversationInsights?: Prisma.JsonNullableFilter<"CampaignRecipient">
   lastConversationAt?: Prisma.DateTimeNullableFilter<"CampaignRecipient"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"CampaignRecipient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CampaignRecipient"> | Date | string
@@ -607,6 +626,7 @@ export type CampaignRecipientCreateWithoutRecipientInput = {
   id?: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -621,6 +641,7 @@ export type CampaignRecipientUncheckedCreateWithoutRecipientInput = {
   campaignId: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -659,6 +680,7 @@ export type CampaignRecipientCreateWithoutDeliveriesInput = {
   id?: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -674,6 +696,7 @@ export type CampaignRecipientUncheckedCreateWithoutDeliveriesInput = {
   recipientId: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -701,6 +724,7 @@ export type CampaignRecipientUpdateWithoutDeliveriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -716,6 +740,7 @@ export type CampaignRecipientUncheckedUpdateWithoutDeliveriesInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -727,6 +752,7 @@ export type CampaignRecipientCreateWithoutLinksInput = {
   id?: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -742,6 +768,7 @@ export type CampaignRecipientUncheckedCreateWithoutLinksInput = {
   recipientId: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -769,6 +796,7 @@ export type CampaignRecipientUpdateWithoutLinksInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -784,6 +812,7 @@ export type CampaignRecipientUncheckedUpdateWithoutLinksInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -795,6 +824,7 @@ export type CampaignRecipientCreateWithoutSessionsInput = {
   id?: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -810,6 +840,7 @@ export type CampaignRecipientUncheckedCreateWithoutSessionsInput = {
   recipientId: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -837,6 +868,7 @@ export type CampaignRecipientUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -852,6 +884,7 @@ export type CampaignRecipientUncheckedUpdateWithoutSessionsInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -864,6 +897,7 @@ export type CampaignRecipientCreateManyCampaignInput = {
   recipientId: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -873,6 +907,7 @@ export type CampaignRecipientUpdateWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -887,6 +922,7 @@ export type CampaignRecipientUncheckedUpdateWithoutCampaignInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -900,6 +936,7 @@ export type CampaignRecipientUncheckedUpdateManyWithoutCampaignInput = {
   recipientId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -910,6 +947,7 @@ export type CampaignRecipientCreateManyRecipientInput = {
   campaignId: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -919,6 +957,7 @@ export type CampaignRecipientUpdateWithoutRecipientInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -933,6 +972,7 @@ export type CampaignRecipientUncheckedUpdateWithoutRecipientInput = {
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -946,6 +986,7 @@ export type CampaignRecipientUncheckedUpdateManyWithoutRecipientInput = {
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1006,6 +1047,7 @@ export type CampaignRecipientSelect<ExtArgs extends runtime.Types.Extensions.Int
   recipientId?: boolean
   context?: boolean
   conversationSummary?: boolean
+  conversationInsights?: boolean
   lastConversationAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1023,6 +1065,7 @@ export type CampaignRecipientSelectCreateManyAndReturn<ExtArgs extends runtime.T
   recipientId?: boolean
   context?: boolean
   conversationSummary?: boolean
+  conversationInsights?: boolean
   lastConversationAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1036,6 +1079,7 @@ export type CampaignRecipientSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   recipientId?: boolean
   context?: boolean
   conversationSummary?: boolean
+  conversationInsights?: boolean
   lastConversationAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1049,12 +1093,13 @@ export type CampaignRecipientSelectScalar = {
   recipientId?: boolean
   context?: boolean
   conversationSummary?: boolean
+  conversationInsights?: boolean
   lastConversationAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CampaignRecipientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "recipientId" | "context" | "conversationSummary" | "lastConversationAt" | "createdAt" | "updatedAt", ExtArgs["result"]["campaignRecipient"]>
+export type CampaignRecipientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "recipientId" | "context" | "conversationSummary" | "conversationInsights" | "lastConversationAt" | "createdAt" | "updatedAt", ExtArgs["result"]["campaignRecipient"]>
 export type CampaignRecipientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
   recipient?: boolean | Prisma.RecipientDefaultArgs<ExtArgs>
@@ -1087,6 +1132,7 @@ export type $CampaignRecipientPayload<ExtArgs extends runtime.Types.Extensions.I
     recipientId: string
     context: runtime.JsonValue | null
     conversationSummary: string | null
+    conversationInsights: runtime.JsonValue | null
     lastConversationAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -1523,6 +1569,7 @@ export interface CampaignRecipientFieldRefs {
   readonly recipientId: Prisma.FieldRef<"CampaignRecipient", 'String'>
   readonly context: Prisma.FieldRef<"CampaignRecipient", 'Json'>
   readonly conversationSummary: Prisma.FieldRef<"CampaignRecipient", 'String'>
+  readonly conversationInsights: Prisma.FieldRef<"CampaignRecipient", 'Json'>
   readonly lastConversationAt: Prisma.FieldRef<"CampaignRecipient", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"CampaignRecipient", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CampaignRecipient", 'DateTime'>

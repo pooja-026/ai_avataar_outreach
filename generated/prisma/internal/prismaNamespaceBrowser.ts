@@ -114,6 +114,7 @@ export const RecipientScalarFieldEnum = {
   email: 'email',
   context: 'context',
   conversationSummary: 'conversationSummary',
+  conversationInsights: 'conversationInsights',
   lastConversationAt: 'lastConversationAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -128,6 +129,7 @@ export const CampaignRecipientScalarFieldEnum = {
   recipientId: 'recipientId',
   context: 'context',
   conversationSummary: 'conversationSummary',
+  conversationInsights: 'conversationInsights',
   lastConversationAt: 'lastConversationAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

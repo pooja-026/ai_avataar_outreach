@@ -84,6 +84,7 @@ model Recipient {
   email     String   @unique
   context   Json?
   conversationSummary String? @db.Text
+  conversationInsights Json?
   lastConversationAt  DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -97,6 +98,7 @@ model CampaignRecipient {
   recipientId String  @db.Uuid
   context    Json?
   conversationSummary String? @db.Text
+  conversationInsights Json?
   lastConversationAt  DateTime?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { buildConversationRecap, type ConversationTurn } from "@/lib/conversation-recap";
+import { createSemanticSummary } from "@/lib/semantic-summary";
 
 const MAX_MESSAGES = 100;
 const MAX_CONTENT_LENGTH = 4_000;
@@ -39,7 +40,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
   });
   if (!session) return NextResponse.json({ error: "Conversation session unavailable." }, { status: 404 });
 
-  const recap = buildConversationRecap(messages);
+  const insights = ended ? await createSemanticSummary(messages) : null;
+  const recap = insights?.executiveSummary ?? (ended ? buildConversationRecap(messages) : null);
   const now = new Date();
   await db.$transaction([
     db.conversationMessage.deleteMany({ where: { sessionId } }),
@@ -59,8 +61,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
     }),
     ...(recap
       ? [
-          db.campaignRecipient.update({ where: { id: session.campaignRecipientId }, data: { conversationSummary: recap, lastConversationAt: now } }),
-          db.recipient.update({ where: { id: session.campaignRecipient.recipientId }, data: { conversationSummary: recap, lastConversationAt: now } }),
+          db.campaignRecipient.update({ where: { id: session.campaignRecipientId }, data: { conversationSummary: recap, ...(insights ? { conversationInsights: insights } : {}), lastConversationAt: now } }),
+          db.recipient.update({ where: { id: session.campaignRecipient.recipientId }, data: { conversationSummary: recap, ...(insights ? { conversationInsights: insights } : {}), lastConversationAt: now } }),
         ]
       : []),
   ]);

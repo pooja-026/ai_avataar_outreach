@@ -16,6 +16,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
   const providerSessionIdRef = useRef<string | null>(null);
   const messageHistoryRef = useRef<Array<{ role: string; content: string }>>([]);
   const syncTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const finalizedRef = useRef(false);
   const greeting = firstName ? `Welcome, ${firstName}` : "Welcome";
 
   async function saveConversation(ended = false) {
@@ -46,6 +47,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
       sessionIdRef.current = body.sessionId;
       providerSessionIdRef.current = null;
       messageHistoryRef.current = [];
+      finalizedRef.current = false;
       const client = createClient(body.sessionToken);
       clientRef.current = client;
       client.addListener(AnamEvent.SESSION_READY, (providerSessionId: string) => { providerSessionIdRef.current = providerSessionId; });
@@ -53,7 +55,12 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
         messageHistoryRef.current = messages.map((message) => ({ role: message.role, content: message.content })).filter((message) => (message.role === "user" || message.role === "persona") && Boolean(message.content?.trim()));
         scheduleConversationSave();
       });
-      client.addListener(AnamEvent.CONNECTION_CLOSED, () => { void saveConversation(true); });
+      client.addListener(AnamEvent.CONNECTION_CLOSED, () => {
+        if (!finalizedRef.current) {
+          finalizedRef.current = true;
+          void saveConversation(true);
+        }
+      });
       await client.streamToVideoElement("anam-avatar-video", audio);
       setState("live");
     } catch (cause) {
@@ -65,6 +72,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
 
   async function stopConversation() {
     if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
+    finalizedRef.current = true;
     await saveConversation(true);
     await clientRef.current?.stopStreaming(); clientRef.current = null;
     audioRef.current?.getTracks().forEach((track) => track.stop()); audioRef.current = null;
