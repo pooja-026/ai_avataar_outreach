@@ -29,6 +29,8 @@ export type RecipientMinAggregateOutputType = {
   firstName: string | null
   lastName: string | null
   email: string | null
+  conversationSummary: string | null
+  lastConversationAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +40,8 @@ export type RecipientMaxAggregateOutputType = {
   firstName: string | null
   lastName: string | null
   email: string | null
+  conversationSummary: string | null
+  lastConversationAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,6 +52,9 @@ export type RecipientCountAggregateOutputType = {
   lastName: number
   email: number
   context: number
+  conversationSummary: number
+  conversationInsights: number
+  lastConversationAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -59,6 +66,8 @@ export type RecipientMinAggregateInputType = {
   firstName?: true
   lastName?: true
   email?: true
+  conversationSummary?: true
+  lastConversationAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -68,6 +77,8 @@ export type RecipientMaxAggregateInputType = {
   firstName?: true
   lastName?: true
   email?: true
+  conversationSummary?: true
+  lastConversationAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -78,6 +89,9 @@ export type RecipientCountAggregateInputType = {
   lastName?: true
   email?: true
   context?: true
+  conversationSummary?: true
+  conversationInsights?: true
+  lastConversationAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -161,6 +175,9 @@ export type RecipientGroupByOutputType = {
   lastName: string | null
   email: string
   context: runtime.JsonValue | null
+  conversationSummary: string | null
+  conversationInsights: runtime.JsonValue | null
+  lastConversationAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: RecipientCountAggregateOutputType | null
@@ -192,6 +209,9 @@ export type RecipientWhereInput = {
   lastName?: Prisma.StringNullableFilter<"Recipient"> | string | null
   email?: Prisma.StringFilter<"Recipient"> | string
   context?: Prisma.JsonNullableFilter<"Recipient">
+  conversationSummary?: Prisma.StringNullableFilter<"Recipient"> | string | null
+  conversationInsights?: Prisma.JsonNullableFilter<"Recipient">
+  lastConversationAt?: Prisma.DateTimeNullableFilter<"Recipient"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Recipient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Recipient"> | Date | string
   campaigns?: Prisma.CampaignRecipientListRelationFilter
@@ -203,6 +223,9 @@ export type RecipientOrderByWithRelationInput = {
   lastName?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
   context?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversationSummary?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversationInsights?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastConversationAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   campaigns?: Prisma.CampaignRecipientOrderByRelationAggregateInput
@@ -217,6 +240,9 @@ export type RecipientWhereUniqueInput = Prisma.AtLeast<{
   firstName?: Prisma.StringNullableFilter<"Recipient"> | string | null
   lastName?: Prisma.StringNullableFilter<"Recipient"> | string | null
   context?: Prisma.JsonNullableFilter<"Recipient">
+  conversationSummary?: Prisma.StringNullableFilter<"Recipient"> | string | null
+  conversationInsights?: Prisma.JsonNullableFilter<"Recipient">
+  lastConversationAt?: Prisma.DateTimeNullableFilter<"Recipient"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Recipient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Recipient"> | Date | string
   campaigns?: Prisma.CampaignRecipientListRelationFilter
@@ -228,6 +254,9 @@ export type RecipientOrderByWithAggregationInput = {
   lastName?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrder
   context?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversationSummary?: Prisma.SortOrderInput | Prisma.SortOrder
+  conversationInsights?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastConversationAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RecipientCountOrderByAggregateInput
@@ -244,6 +273,9 @@ export type RecipientScalarWhereWithAggregatesInput = {
   lastName?: Prisma.StringNullableWithAggregatesFilter<"Recipient"> | string | null
   email?: Prisma.StringWithAggregatesFilter<"Recipient"> | string
   context?: Prisma.JsonNullableWithAggregatesFilter<"Recipient">
+  conversationSummary?: Prisma.StringNullableWithAggregatesFilter<"Recipient"> | string | null
+  conversationInsights?: Prisma.JsonNullableWithAggregatesFilter<"Recipient">
+  lastConversationAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Recipient"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Recipient"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Recipient"> | Date | string
 }
@@ -254,6 +286,9 @@ export type RecipientCreateInput = {
   lastName?: string | null
   email: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   campaigns?: Prisma.CampaignRecipientCreateNestedManyWithoutRecipientInput
@@ -265,6 +300,9 @@ export type RecipientUncheckedCreateInput = {
   lastName?: string | null
   email: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   campaigns?: Prisma.CampaignRecipientUncheckedCreateNestedManyWithoutRecipientInput
@@ -276,6 +314,9 @@ export type RecipientUpdateInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaigns?: Prisma.CampaignRecipientUpdateManyWithoutRecipientNestedInput
@@ -287,6 +328,9 @@ export type RecipientUncheckedUpdateInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaigns?: Prisma.CampaignRecipientUncheckedUpdateManyWithoutRecipientNestedInput
@@ -298,6 +342,9 @@ export type RecipientCreateManyInput = {
   lastName?: string | null
   email: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -308,6 +355,9 @@ export type RecipientUpdateManyMutationInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -318,6 +368,9 @@ export type RecipientUncheckedUpdateManyInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -328,6 +381,9 @@ export type RecipientCountOrderByAggregateInput = {
   lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   context?: Prisma.SortOrder
+  conversationSummary?: Prisma.SortOrder
+  conversationInsights?: Prisma.SortOrder
+  lastConversationAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -337,6 +393,8 @@ export type RecipientMaxOrderByAggregateInput = {
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  conversationSummary?: Prisma.SortOrder
+  lastConversationAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -346,6 +404,8 @@ export type RecipientMinOrderByAggregateInput = {
   firstName?: Prisma.SortOrder
   lastName?: Prisma.SortOrder
   email?: Prisma.SortOrder
+  conversationSummary?: Prisma.SortOrder
+  lastConversationAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -353,6 +413,10 @@ export type RecipientMinOrderByAggregateInput = {
 export type RecipientScalarRelationFilter = {
   is?: Prisma.RecipientWhereInput
   isNot?: Prisma.RecipientWhereInput
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type RecipientCreateNestedOneWithoutCampaignsInput = {
@@ -375,6 +439,9 @@ export type RecipientCreateWithoutCampaignsInput = {
   lastName?: string | null
   email: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -385,6 +452,9 @@ export type RecipientUncheckedCreateWithoutCampaignsInput = {
   lastName?: string | null
   email: string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -411,6 +481,9 @@ export type RecipientUpdateWithoutCampaignsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -421,6 +494,9 @@ export type RecipientUncheckedUpdateWithoutCampaignsInput = {
   lastName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.StringFieldUpdateOperationsInput | string
   context?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  conversationSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conversationInsights?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  lastConversationAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -462,6 +538,9 @@ export type RecipientSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   lastName?: boolean
   email?: boolean
   context?: boolean
+  conversationSummary?: boolean
+  conversationInsights?: boolean
+  lastConversationAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   campaigns?: boolean | Prisma.Recipient$campaignsArgs<ExtArgs>
@@ -474,6 +553,9 @@ export type RecipientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   lastName?: boolean
   email?: boolean
   context?: boolean
+  conversationSummary?: boolean
+  conversationInsights?: boolean
+  lastConversationAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["recipient"]>
@@ -484,6 +566,9 @@ export type RecipientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   lastName?: boolean
   email?: boolean
   context?: boolean
+  conversationSummary?: boolean
+  conversationInsights?: boolean
+  lastConversationAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["recipient"]>
@@ -494,11 +579,14 @@ export type RecipientSelectScalar = {
   lastName?: boolean
   email?: boolean
   context?: boolean
+  conversationSummary?: boolean
+  conversationInsights?: boolean
+  lastConversationAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RecipientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "context" | "createdAt" | "updatedAt", ExtArgs["result"]["recipient"]>
+export type RecipientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "context" | "conversationSummary" | "conversationInsights" | "lastConversationAt" | "createdAt" | "updatedAt", ExtArgs["result"]["recipient"]>
 export type RecipientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaigns?: boolean | Prisma.Recipient$campaignsArgs<ExtArgs>
   _count?: boolean | Prisma.RecipientCountOutputTypeDefaultArgs<ExtArgs>
@@ -517,6 +605,9 @@ export type $RecipientPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     lastName: string | null
     email: string
     context: runtime.JsonValue | null
+    conversationSummary: string | null
+    conversationInsights: runtime.JsonValue | null
+    lastConversationAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["recipient"]>
@@ -948,6 +1039,9 @@ export interface RecipientFieldRefs {
   readonly lastName: Prisma.FieldRef<"Recipient", 'String'>
   readonly email: Prisma.FieldRef<"Recipient", 'String'>
   readonly context: Prisma.FieldRef<"Recipient", 'Json'>
+  readonly conversationSummary: Prisma.FieldRef<"Recipient", 'String'>
+  readonly conversationInsights: Prisma.FieldRef<"Recipient", 'Json'>
+  readonly lastConversationAt: Prisma.FieldRef<"Recipient", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Recipient", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Recipient", 'DateTime'>
 }

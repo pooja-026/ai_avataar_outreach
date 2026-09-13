@@ -36,6 +36,12 @@ enum ConversationRole {
   TOOL
 }
 
+enum EmailDeliveryStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
 model AvatarConfiguration {
   id          String     @id @default(uuid()) @db.Uuid
   name        String
@@ -77,6 +83,9 @@ model Recipient {
   lastName  String?
   email     String   @unique
   context   Json?
+  conversationSummary String? @db.Text
+  conversationInsights Json?
+  lastConversationAt  DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -88,6 +97,9 @@ model CampaignRecipient {
   campaignId String   @db.Uuid
   recipientId String  @db.Uuid
   context    Json?
+  conversationSummary String? @db.Text
+  conversationInsights Json?
+  lastConversationAt  DateTime?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -95,9 +107,28 @@ model CampaignRecipient {
   recipient Recipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
   links     RecipientLink[]
   sessions  AvatarSession[]
+  deliveries EmailDelivery[]
 
   @@unique([campaignId, recipientId])
   @@index([recipientId])
+}
+
+model EmailDelivery {
+  id                  String              @id @default(uuid()) @db.Uuid
+  campaignRecipientId String              @db.Uuid
+  recipientLinkId     String?             @db.Uuid
+  providerMessageId   String?             @unique
+  status              EmailDeliveryStatus @default(PENDING)
+  errorMessage        String?             @db.Text
+  sentAt              DateTime?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+
+  campaignRecipient CampaignRecipient @relation(fields: [campaignRecipientId], references: [id], onDelete: Cascade)
+  recipientLink     RecipientLink?      @relation(fields: [recipientLinkId], references: [id], onDelete: SetNull)
+
+  @@index([campaignRecipientId, createdAt])
+  @@index([status])
 }
 
 model RecipientLink {
@@ -113,6 +144,7 @@ model RecipientLink {
 
   campaignRecipient CampaignRecipient @relation(fields: [campaignRecipientId], references: [id], onDelete: Cascade)
   sessions          AvatarSession[]
+  deliveries        EmailDelivery[]
 
   @@index([campaignRecipientId])
   @@index([status, expiresAt])

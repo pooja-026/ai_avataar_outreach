@@ -38,6 +38,11 @@ export type Recipient = Prisma.RecipientModel
  */
 export type CampaignRecipient = Prisma.CampaignRecipientModel
 /**
+ * Model EmailDelivery
+ * 
+ */
+export type EmailDelivery = Prisma.EmailDeliveryModel
+/**
  * Model RecipientLink
  * 
  */

@@ -401,6 +401,7 @@ export const ModelName = {
   Campaign: 'Campaign',
   Recipient: 'Recipient',
   CampaignRecipient: 'CampaignRecipient',
+  EmailDelivery: 'EmailDelivery',
   RecipientLink: 'RecipientLink',
   AvatarSession: 'AvatarSession',
   ConversationMessage: 'ConversationMessage'
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "avatarConfiguration" | "campaign" | "recipient" | "campaignRecipient" | "recipientLink" | "avatarSession" | "conversationMessage"
+    modelProps: "avatarConfiguration" | "campaign" | "recipient" | "campaignRecipient" | "emailDelivery" | "recipientLink" | "avatarSession" | "conversationMessage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -716,6 +717,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.CampaignRecipientCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.CampaignRecipientCountAggregateOutputType> | number
+        }
+      }
+    }
+    EmailDelivery: {
+      payload: Prisma.$EmailDeliveryPayload<ExtArgs>
+      fields: Prisma.EmailDeliveryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EmailDeliveryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EmailDeliveryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload>
+        }
+        findFirst: {
+          args: Prisma.EmailDeliveryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EmailDeliveryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload>
+        }
+        findMany: {
+          args: Prisma.EmailDeliveryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload>[]
+        }
+        create: {
+          args: Prisma.EmailDeliveryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload>
+        }
+        createMany: {
+          args: Prisma.EmailDeliveryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EmailDeliveryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload>[]
+        }
+        delete: {
+          args: Prisma.EmailDeliveryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload>
+        }
+        update: {
+          args: Prisma.EmailDeliveryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload>
+        }
+        deleteMany: {
+          args: Prisma.EmailDeliveryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EmailDeliveryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EmailDeliveryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload>[]
+        }
+        upsert: {
+          args: Prisma.EmailDeliveryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EmailDeliveryPayload>
+        }
+        aggregate: {
+          args: Prisma.EmailDeliveryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEmailDelivery>
+        }
+        groupBy: {
+          args: Prisma.EmailDeliveryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailDeliveryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EmailDeliveryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EmailDeliveryCountAggregateOutputType> | number
         }
       }
     }
@@ -1016,6 +1091,9 @@ export const RecipientScalarFieldEnum = {
   lastName: 'lastName',
   email: 'email',
   context: 'context',
+  conversationSummary: 'conversationSummary',
+  conversationInsights: 'conversationInsights',
+  lastConversationAt: 'lastConversationAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1028,11 +1106,29 @@ export const CampaignRecipientScalarFieldEnum = {
   campaignId: 'campaignId',
   recipientId: 'recipientId',
   context: 'context',
+  conversationSummary: 'conversationSummary',
+  conversationInsights: 'conversationInsights',
+  lastConversationAt: 'lastConversationAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CampaignRecipientScalarFieldEnum = (typeof CampaignRecipientScalarFieldEnum)[keyof typeof CampaignRecipientScalarFieldEnum]
+
+
+export const EmailDeliveryScalarFieldEnum = {
+  id: 'id',
+  campaignRecipientId: 'campaignRecipientId',
+  recipientLinkId: 'recipientLinkId',
+  providerMessageId: 'providerMessageId',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailDeliveryScalarFieldEnum = (typeof EmailDeliveryScalarFieldEnum)[keyof typeof EmailDeliveryScalarFieldEnum]
 
 
 export const RecipientLinkScalarFieldEnum = {
@@ -1187,6 +1283,20 @@ export type EnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$P
  * Reference to a field of type 'CampaignStatus[]'
  */
 export type ListEnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailDeliveryStatus'
+ */
+export type EnumEmailDeliveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailDeliveryStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'EmailDeliveryStatus[]'
+ */
+export type ListEnumEmailDeliveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailDeliveryStatus[]'>
     
 
 
@@ -1414,6 +1524,7 @@ export type GlobalOmitConfig = {
   campaign?: Prisma.CampaignOmit
   recipient?: Prisma.RecipientOmit
   campaignRecipient?: Prisma.CampaignRecipientOmit
+  emailDelivery?: Prisma.EmailDeliveryOmit
   recipientLink?: Prisma.RecipientLinkOmit
   avatarSession?: Prisma.AvatarSessionOmit
   conversationMessage?: Prisma.ConversationMessageOmit

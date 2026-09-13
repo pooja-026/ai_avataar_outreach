@@ -55,6 +55,7 @@ export const ModelName = {
   Campaign: 'Campaign',
   Recipient: 'Recipient',
   CampaignRecipient: 'CampaignRecipient',
+  EmailDelivery: 'EmailDelivery',
   RecipientLink: 'RecipientLink',
   AvatarSession: 'AvatarSession',
   ConversationMessage: 'ConversationMessage'
@@ -112,6 +113,9 @@ export const RecipientScalarFieldEnum = {
   lastName: 'lastName',
   email: 'email',
   context: 'context',
+  conversationSummary: 'conversationSummary',
+  conversationInsights: 'conversationInsights',
+  lastConversationAt: 'lastConversationAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -124,11 +128,29 @@ export const CampaignRecipientScalarFieldEnum = {
   campaignId: 'campaignId',
   recipientId: 'recipientId',
   context: 'context',
+  conversationSummary: 'conversationSummary',
+  conversationInsights: 'conversationInsights',
+  lastConversationAt: 'lastConversationAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CampaignRecipientScalarFieldEnum = (typeof CampaignRecipientScalarFieldEnum)[keyof typeof CampaignRecipientScalarFieldEnum]
+
+
+export const EmailDeliveryScalarFieldEnum = {
+  id: 'id',
+  campaignRecipientId: 'campaignRecipientId',
+  recipientLinkId: 'recipientLinkId',
+  providerMessageId: 'providerMessageId',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailDeliveryScalarFieldEnum = (typeof EmailDeliveryScalarFieldEnum)[keyof typeof EmailDeliveryScalarFieldEnum]
 
 
 export const RecipientLinkScalarFieldEnum = {
