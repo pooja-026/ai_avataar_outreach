@@ -447,14 +447,6 @@ export type ConversationMessageUncheckedUpdateManyWithoutSessionNestedInput = {
   deleteMany?: Prisma.ConversationMessageScalarWhereInput | Prisma.ConversationMessageScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type EnumConversationRoleFieldUpdateOperationsInput = {
   set?: $Enums.ConversationRole
 }
