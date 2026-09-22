@@ -18,8 +18,12 @@ export async function POST(_request: Request, { params }: { params: Promise<{ to
   }
 
   const link = await getDb().recipientLink.findUnique({ where: { token }, include: { campaignRecipient: { include: { campaign: true, recipient: true } } } });
-  if (!link || link.status !== "ACTIVE" || (link.expiresAt && link.expiresAt <= new Date())) {
+  if (!link || link.status !== "ACTIVE") {
     return NextResponse.json({ error: "Invitation unavailable." }, { status: 404 });
+  }
+  if (link.expiresAt && link.expiresAt <= new Date()) {
+    await getDb().recipientLink.update({ where: { id: link.id }, data: { status: "EXPIRED" } });
+    return NextResponse.json({ error: "This invitation expired after 24 hours." }, { status: 410 });
   }
 
   const context = buildAvatarContext({

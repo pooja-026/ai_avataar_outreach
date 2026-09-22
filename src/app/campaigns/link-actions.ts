@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getDb } from "@/lib/db";
 
+const INVITATION_LIFETIME_MS = 24 * 60 * 60 * 1000;
+
 export async function createRecipientLink(campaignId: string, campaignRecipientId: string) {
   const db = getDb();
   const assignment = await db.campaignRecipient.findFirst({ where: { id: campaignRecipientId, campaignId } });
@@ -12,7 +14,13 @@ export async function createRecipientLink(campaignId: string, campaignRecipientI
 
   await db.$transaction(async (tx) => {
     await tx.recipientLink.updateMany({ where: { campaignRecipientId, status: "ACTIVE" }, data: { status: "REVOKED", revokedAt: new Date() } });
-    await tx.recipientLink.create({ data: { campaignRecipientId, token: randomBytes(32).toString("base64url") } });
+    await tx.recipientLink.create({
+      data: {
+        campaignRecipientId,
+        token: randomBytes(32).toString("base64url"),
+        expiresAt: new Date(Date.now() + INVITATION_LIFETIME_MS),
+      },
+    });
   });
   revalidatePath(`/campaigns/${campaignId}`);
   redirect(`/campaigns/${campaignId}?linkCreated=1`);
