@@ -1,7 +1,7 @@
 import { get } from "@vercel/blob";
 import mammoth from "mammoth";
 import OpenAI from "openai";
-import pdf from "pdf-parse";
+import pdf from "pdf-parse/lib/pdf-parse";
 import { getDb } from "@/lib/db";
 
 const CHUNK_SIZE = 900;
