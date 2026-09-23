@@ -17,6 +17,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
   const messageHistoryRef = useRef<Array<{ role: string; content: string }>>([]);
   const syncTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const finalizedRef = useRef(false);
+  const lastProcessedUserMessageIdRef = useRef<string | null>(null);
   const greeting = firstName ? `Welcome, ${firstName}` : "Welcome";
 
   async function saveConversation(ended = false) {
@@ -35,6 +36,21 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
     syncTimerRef.current = setTimeout(() => { void saveConversation(); }, 600);
   }
 
+  async function answerWithCampaignKnowledge(messages: Array<{ id: string; role: string; content: string }>) {
+    const latestUserMessage = [...messages].reverse().find((message) => message.role === "user");
+    if (!latestUserMessage || latestUserMessage.id === lastProcessedUserMessageIdRef.current || !clientRef.current) return;
+    lastProcessedUserMessageIdRef.current = latestUserMessage.id;
+    const response = await fetch(`/api/recipient-links/${encodeURIComponent(token)}/sessions/${encodeURIComponent(sessionIdRef.current || "")}/rag-reply`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: messages.map((message) => ({ role: message.role, content: message.content })) }),
+    });
+    const answer = (await response.text()).trim();
+    if (!response.ok || !answer) throw new Error("Unable to generate a grounded response.");
+    const talkStream = clientRef.current.createTalkMessageStream();
+    await talkStream.streamMessageChunk(answer, true);
+  }
+
   async function startConversation() {
     setState("connecting"); setError("");
     try {
@@ -47,6 +63,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
       sessionIdRef.current = body.sessionId;
       providerSessionIdRef.current = null;
       messageHistoryRef.current = [];
+      lastProcessedUserMessageIdRef.current = null;
       finalizedRef.current = false;
       const client = createClient(body.sessionToken);
       clientRef.current = client;
@@ -54,6 +71,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
       client.addListener(AnamEvent.MESSAGE_HISTORY_UPDATED, (messages) => {
         messageHistoryRef.current = messages.map((message) => ({ role: message.role, content: message.content })).filter((message) => (message.role === "user" || message.role === "persona") && Boolean(message.content?.trim()));
         scheduleConversationSave();
+        void answerWithCampaignKnowledge(messages).catch(() => setError("We could not prepare a grounded answer. Please try again."));
       });
       client.addListener(AnamEvent.CONNECTION_CLOSED, () => {
         if (!finalizedRef.current) {
