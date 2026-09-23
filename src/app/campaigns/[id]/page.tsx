@@ -33,7 +33,7 @@ export default async function CampaignDetailPage({ params, searchParams }: { par
 
   const knowledgeNotice = query.knowledge === "uploaded" ? "Document uploaded privately. Processing will begin when the RAG pipeline is enabled."
     : query.knowledge === "deleted" ? "Document removed."
-      : query.knowledgeError === "file" ? "Unable to upload that file. Use a supported file type up to 4 MB."
+      : query.knowledgeError === "file" ? "Unable to upload those files. Use supported file types with a 4 MB combined maximum."
         : query.knowledgeError === "storage" ? "Unable to store the document. Check the private Blob configuration and try again."
           : undefined;
 
