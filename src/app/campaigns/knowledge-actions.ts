@@ -68,12 +68,13 @@ export async function deleteKnowledgeDocument(campaignId: string, formData: Form
 }
 
 export async function prepareCampaignKnowledge(campaignId: string) {
+  let result: { processed: number; failed: number };
   try {
-    const result = await processCampaignKnowledge(campaignId);
-    refreshCampaign(campaignId);
-    redirect(`/campaigns/${campaignId}?knowledge=${result.failed ? "partiallyProcessed" : "processed"}`);
+    result = await processCampaignKnowledge(campaignId);
   } catch (error) {
     console.error("Campaign knowledge processing failed", error instanceof Error ? error.name : "unknown");
     redirect(`/campaigns/${campaignId}?knowledgeError=processing`);
   }
+  refreshCampaign(campaignId);
+  redirect(`/campaigns/${campaignId}?knowledge=${result.failed ? "partiallyProcessed" : "processed"}`);
 }
