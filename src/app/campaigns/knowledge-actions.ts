@@ -4,6 +4,7 @@ import { del, put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getDb } from "@/lib/db";
+import { processCampaignKnowledge } from "@/lib/knowledge-processing";
 
 const MAX_BATCH_SIZE = 4 * 1024 * 1024;
 const ACCEPTED_TYPES = new Set([
@@ -64,4 +65,15 @@ export async function deleteKnowledgeDocument(campaignId: string, formData: Form
   await getDb().knowledgeDocument.delete({ where: { id: documentId } });
   refreshCampaign(campaignId);
   redirect(`/campaigns/${campaignId}?knowledge=deleted`);
+}
+
+export async function prepareCampaignKnowledge(campaignId: string) {
+  try {
+    const result = await processCampaignKnowledge(campaignId);
+    refreshCampaign(campaignId);
+    redirect(`/campaigns/${campaignId}?knowledge=${result.failed ? "partiallyProcessed" : "processed"}`);
+  } catch (error) {
+    console.error("Campaign knowledge processing failed", error instanceof Error ? error.name : "unknown");
+    redirect(`/campaigns/${campaignId}?knowledgeError=processing`);
+  }
 }

@@ -7,7 +7,7 @@ import { createRecipientLink, revokeRecipientLink } from "../link-actions";
 import { updateCampaign } from "../actions";
 import { sendCampaignEmail } from "../email-actions";
 import { KnowledgeBasePanel } from "../knowledge-base-panel";
-import { deleteKnowledgeDocument, uploadKnowledgeDocument } from "../knowledge-actions";
+import { deleteKnowledgeDocument, prepareCampaignKnowledge, uploadKnowledgeDocument } from "../knowledge-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -31,10 +31,13 @@ export default async function CampaignDetailPage({ params, searchParams }: { par
   ]);
   if (!campaign) notFound();
 
-  const knowledgeNotice = query.knowledge === "uploaded" ? "Document uploaded privately. Processing will begin when the RAG pipeline is enabled."
+  const knowledgeNotice = query.knowledge === "uploaded" ? "Documents uploaded privately. Prepare them before the avatar can use them."
+    : query.knowledge === "processed" ? "Knowledge is ready. The avatar can now retrieve these campaign sources."
+    : query.knowledge === "partiallyProcessed" ? "Some documents could not be prepared. Review the failed documents and try again."
     : query.knowledge === "deleted" ? "Document removed."
       : query.knowledgeError === "file" ? "Unable to upload those files. Use supported file types with a 4 MB combined maximum."
         : query.knowledgeError === "storage" ? "Unable to store the document. Check the private Blob configuration and try again."
+          : query.knowledgeError === "processing" ? "Unable to prepare the knowledge documents. Check the OpenAI key and document content, then try again."
           : undefined;
 
   return <main className="min-h-screen bg-[#f6f8fb] px-5 py-8 text-slate-950 sm:px-8"><div className="mx-auto max-w-3xl">
@@ -44,7 +47,7 @@ export default async function CampaignDetailPage({ params, searchParams }: { par
       {(query.created === "1" || query.saved === "1") && <p className="mt-6 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">Saved.</p>}
       <div className="mt-8"><CampaignForm action={updateCampaign.bind(null, campaign.id)} campaign={campaign} error={query.error} submitLabel="Save changes" /></div>
     </section>
-    <KnowledgeBasePanel campaignId={campaign.id} deleteAction={deleteKnowledgeDocument.bind(null, campaign.id)} documents={knowledge.map(({ document }) => ({ id: document.id, filename: document.filename, contentType: document.contentType, fileSize: document.fileSize, status: document.status, chunkCount: document.chunkCount }))} notice={knowledgeNotice} uploadAction={uploadKnowledgeDocument.bind(null, campaign.id)} />
+    <KnowledgeBasePanel campaignId={campaign.id} deleteAction={deleteKnowledgeDocument.bind(null, campaign.id)} documents={knowledge.map(({ document }) => ({ id: document.id, filename: document.filename, contentType: document.contentType, fileSize: document.fileSize, status: document.status, chunkCount: document.chunkCount }))} notice={knowledgeNotice} prepareAction={prepareCampaignKnowledge.bind(null, campaign.id)} uploadAction={uploadKnowledgeDocument.bind(null, campaign.id)} />
     <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
       <p className="text-xs font-semibold tracking-[.14em] text-indigo-600 uppercase">Recipients</p><h2 className="mt-3 text-2xl font-semibold">Assign people and issue links</h2>
       {query.sent === "1" && <p className="mt-5 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">Email sent.</p>}

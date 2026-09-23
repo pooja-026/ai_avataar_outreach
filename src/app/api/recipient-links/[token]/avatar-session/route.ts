@@ -10,10 +10,9 @@ export async function POST(_request: Request, { params }: { params: Promise<{ to
   const avatarId = process.env.ANAM_AVATAR_ID;
   const avatarModel = process.env.ANAM_AVATAR_MODEL || "cara-4";
   const voiceId = process.env.ANAM_VOICE_ID;
-  const llmId = process.env.ANAM_LLM_ID;
   const personaName = process.env.ANAM_PERSONA_NAME || "Outreach Assistant";
 
-  if (!apiKey || !avatarId || !voiceId || !llmId) {
+  if (!apiKey || !avatarId || !voiceId || !process.env.OPENAI_API_KEY) {
     return NextResponse.json({ error: "Avatar service is not configured." }, { status: 503 });
   }
 
@@ -39,7 +38,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ to
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify({ personaConfig: { name: personaName, avatarId, avatarModel, voiceId, llmId, systemPrompt: context.prompt } }),
+      body: JSON.stringify({ personaConfig: { name: personaName, avatarId, avatarModel, voiceId, llmId: "CUSTOMER_CLIENT_V1" } }),
       cache: "no-store",
     });
 
@@ -66,6 +65,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ to
         status: "CREATED",
         contextSnapshot: {
           prompt: context.prompt,
+          ragMode: true,
           campaign: { name: link.campaignRecipient.campaign.name, message: link.campaignRecipient.campaign.message, notes: context.campaignNotes },
           recipient: { name: context.recipientName, notes: context.recipientNotes },
           campaignRecipientNotes: context.campaignRecipientNotes,
