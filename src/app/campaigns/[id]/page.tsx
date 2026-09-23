@@ -9,6 +9,8 @@ import { sendCampaignEmail } from "../email-actions";
 import { KnowledgeBasePanel } from "../knowledge-base-panel";
 import { deleteKnowledgeDocument, uploadKnowledgeDocument } from "../knowledge-actions";
 
+export const dynamic = "force-dynamic";
+
 type SearchParams = {
   created?: string; saved?: string; error?: string; recipientAdded?: string; linkCreated?: string; linkRevoked?: string;
   sent?: string; sendError?: string; knowledge?: string; knowledgeError?: string;

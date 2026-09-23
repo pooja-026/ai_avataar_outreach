@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDb } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 import { updateRecipient } from "../actions";
 import { RecipientForm } from "../recipient-form";
 
