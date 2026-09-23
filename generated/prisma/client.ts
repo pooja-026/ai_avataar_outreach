@@ -72,6 +72,21 @@ export type EmailDelivery = Prisma.EmailDeliveryModel
  */
 export type RecipientLink = Prisma.RecipientLinkModel
 /**
+ * Model KnowledgeDocument
+ * 
+ */
+export type KnowledgeDocument = Prisma.KnowledgeDocumentModel
+/**
+ * Model CampaignKnowledge
+ * 
+ */
+export type CampaignKnowledge = Prisma.CampaignKnowledgeModel
+/**
+ * Model KnowledgeChunk
+ * 
+ */
+export type KnowledgeChunk = Prisma.KnowledgeChunkModel
+/**
  * Model AvatarSession
  * 
  */

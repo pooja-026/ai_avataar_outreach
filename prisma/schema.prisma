@@ -42,6 +42,13 @@ enum EmailDeliveryStatus {
   FAILED
 }
 
+enum KnowledgeDocumentStatus {
+  UPLOADED
+  PROCESSING
+  READY
+  FAILED
+}
+
 model AvatarConfiguration {
   id          String     @id @default(uuid()) @db.Uuid
   name        String
@@ -72,6 +79,7 @@ model Campaign {
 
   avatarConfiguration AvatarConfiguration? @relation(fields: [avatarConfigurationId], references: [id], onDelete: SetNull)
   recipients          CampaignRecipient[]
+  knowledge           CampaignKnowledge[]
 
   @@index([status])
   @@index([avatarConfigurationId])
@@ -148,6 +156,50 @@ model RecipientLink {
 
   @@index([campaignRecipientId])
   @@index([status, expiresAt])
+}
+
+model KnowledgeDocument {
+  id              String                  @id @default(uuid()) @db.Uuid
+  filename        String
+  contentType     String
+  fileSize        Int
+  blobUrl         String                  @unique
+  status          KnowledgeDocumentStatus @default(UPLOADED)
+  processingError String?                 @db.Text
+  chunkCount      Int                     @default(0)
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+
+  campaigns CampaignKnowledge[]
+  chunks    KnowledgeChunk[]
+}
+
+model CampaignKnowledge {
+  id         String            @id @default(uuid()) @db.Uuid
+  campaignId String            @db.Uuid
+  documentId String            @db.Uuid
+  createdAt  DateTime          @default(now())
+
+  campaign Campaign          @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  document KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, documentId])
+  @@index([documentId])
+}
+
+model KnowledgeChunk {
+  id          String            @id @default(uuid()) @db.Uuid
+  documentId  String            @db.Uuid
+  sequence    Int
+  content     String            @db.Text
+  embedding   Json?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  document KnowledgeDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, sequence])
+  @@index([documentId])
 }
 
 model AvatarSession {

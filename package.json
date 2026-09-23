@@ -17,6 +17,7 @@
     "@anam-ai/js-sdk": "^4.27.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
+    "@vercel/blob": "^2.8.0",
     "dotenv": "^17.4.2",
     "next": "16.3.4",
     "nodemailer": "^10.0.9",

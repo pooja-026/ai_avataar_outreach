@@ -15,7 +15,8 @@ export async function sendCampaignEmail(campaignId: string, campaignRecipientId:
   const from = process.env.EMAIL_FROM || (gmailUser ? `Avataar Outreach <${gmailUser}>` : undefined);
   if (!gmailUser || !gmailAppPassword || !from) redirect(`/campaigns/${campaignId}?sendError=config`);
 
-  const assignment = await getDb().campaignRecipient.findFirst({ where: { id: campaignRecipientId, campaignId }, include: { recipient: true, campaign: true, links: { where: { status: "ACTIVE" }, orderBy: { createdAt: "desc" }, take: 1 } } });
+  const now = new Date();
+  const assignment = await getDb().campaignRecipient.findFirst({ where: { id: campaignRecipientId, campaignId }, include: { recipient: true, campaign: true, links: { where: { status: "ACTIVE", OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] }, orderBy: { createdAt: "desc" }, take: 1 } } });
   const link = assignment?.links[0];
   if (!assignment || !link) redirect(`/campaigns/${campaignId}?sendError=link`);
 

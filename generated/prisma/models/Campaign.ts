@@ -212,6 +212,7 @@ export type CampaignWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   avatarConfiguration?: Prisma.XOR<Prisma.AvatarConfigurationNullableScalarRelationFilter, Prisma.AvatarConfigurationWhereInput> | null
   recipients?: Prisma.CampaignRecipientListRelationFilter
+  knowledge?: Prisma.CampaignKnowledgeListRelationFilter
 }
 
 export type CampaignOrderByWithRelationInput = {
@@ -226,6 +227,7 @@ export type CampaignOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   avatarConfiguration?: Prisma.AvatarConfigurationOrderByWithRelationInput
   recipients?: Prisma.CampaignRecipientOrderByRelationAggregateInput
+  knowledge?: Prisma.CampaignKnowledgeOrderByRelationAggregateInput
 }
 
 export type CampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -243,6 +245,7 @@ export type CampaignWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   avatarConfiguration?: Prisma.XOR<Prisma.AvatarConfigurationNullableScalarRelationFilter, Prisma.AvatarConfigurationWhereInput> | null
   recipients?: Prisma.CampaignRecipientListRelationFilter
+  knowledge?: Prisma.CampaignKnowledgeListRelationFilter
 }, "id">
 
 export type CampaignOrderByWithAggregationInput = {
@@ -286,6 +289,7 @@ export type CampaignCreateInput = {
   updatedAt?: Date | string
   avatarConfiguration?: Prisma.AvatarConfigurationCreateNestedOneWithoutCampaignsInput
   recipients?: Prisma.CampaignRecipientCreateNestedManyWithoutCampaignInput
+  knowledge?: Prisma.CampaignKnowledgeCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateInput = {
@@ -299,6 +303,7 @@ export type CampaignUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   recipients?: Prisma.CampaignRecipientUncheckedCreateNestedManyWithoutCampaignInput
+  knowledge?: Prisma.CampaignKnowledgeUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUpdateInput = {
@@ -312,6 +317,7 @@ export type CampaignUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   avatarConfiguration?: Prisma.AvatarConfigurationUpdateOneWithoutCampaignsNestedInput
   recipients?: Prisma.CampaignRecipientUpdateManyWithoutCampaignNestedInput
+  knowledge?: Prisma.CampaignKnowledgeUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateInput = {
@@ -325,6 +331,7 @@ export type CampaignUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipients?: Prisma.CampaignRecipientUncheckedUpdateManyWithoutCampaignNestedInput
+  knowledge?: Prisma.CampaignKnowledgeUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateManyInput = {
@@ -471,6 +478,20 @@ export type CampaignUpdateOneRequiredWithoutRecipientsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutRecipientsInput, Prisma.CampaignUpdateWithoutRecipientsInput>, Prisma.CampaignUncheckedUpdateWithoutRecipientsInput>
 }
 
+export type CampaignCreateNestedOneWithoutKnowledgeInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutKnowledgeInput, Prisma.CampaignUncheckedCreateWithoutKnowledgeInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutKnowledgeInput
+  connect?: Prisma.CampaignWhereUniqueInput
+}
+
+export type CampaignUpdateOneRequiredWithoutKnowledgeNestedInput = {
+  create?: Prisma.XOR<Prisma.CampaignCreateWithoutKnowledgeInput, Prisma.CampaignUncheckedCreateWithoutKnowledgeInput>
+  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutKnowledgeInput
+  upsert?: Prisma.CampaignUpsertWithoutKnowledgeInput
+  connect?: Prisma.CampaignWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutKnowledgeInput, Prisma.CampaignUpdateWithoutKnowledgeInput>, Prisma.CampaignUncheckedUpdateWithoutKnowledgeInput>
+}
+
 export type CampaignCreateWithoutAvatarConfigurationInput = {
   id?: string
   name: string
@@ -481,6 +502,7 @@ export type CampaignCreateWithoutAvatarConfigurationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   recipients?: Prisma.CampaignRecipientCreateNestedManyWithoutCampaignInput
+  knowledge?: Prisma.CampaignKnowledgeCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutAvatarConfigurationInput = {
@@ -493,6 +515,7 @@ export type CampaignUncheckedCreateWithoutAvatarConfigurationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   recipients?: Prisma.CampaignRecipientUncheckedCreateNestedManyWithoutCampaignInput
+  knowledge?: Prisma.CampaignKnowledgeUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutAvatarConfigurationInput = {
@@ -546,6 +569,7 @@ export type CampaignCreateWithoutRecipientsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   avatarConfiguration?: Prisma.AvatarConfigurationCreateNestedOneWithoutCampaignsInput
+  knowledge?: Prisma.CampaignKnowledgeCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutRecipientsInput = {
@@ -558,6 +582,7 @@ export type CampaignUncheckedCreateWithoutRecipientsInput = {
   avatarConfigurationId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  knowledge?: Prisma.CampaignKnowledgeUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutRecipientsInput = {
@@ -586,6 +611,7 @@ export type CampaignUpdateWithoutRecipientsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   avatarConfiguration?: Prisma.AvatarConfigurationUpdateOneWithoutCampaignsNestedInput
+  knowledge?: Prisma.CampaignKnowledgeUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutRecipientsInput = {
@@ -598,6 +624,75 @@ export type CampaignUncheckedUpdateWithoutRecipientsInput = {
   avatarConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  knowledge?: Prisma.CampaignKnowledgeUncheckedUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignCreateWithoutKnowledgeInput = {
+  id?: string
+  name: string
+  subject?: string | null
+  message: string
+  status?: $Enums.CampaignStatus
+  defaultContext?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  avatarConfiguration?: Prisma.AvatarConfigurationCreateNestedOneWithoutCampaignsInput
+  recipients?: Prisma.CampaignRecipientCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignUncheckedCreateWithoutKnowledgeInput = {
+  id?: string
+  name: string
+  subject?: string | null
+  message: string
+  status?: $Enums.CampaignStatus
+  defaultContext?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarConfigurationId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recipients?: Prisma.CampaignRecipientUncheckedCreateNestedManyWithoutCampaignInput
+}
+
+export type CampaignCreateOrConnectWithoutKnowledgeInput = {
+  where: Prisma.CampaignWhereUniqueInput
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutKnowledgeInput, Prisma.CampaignUncheckedCreateWithoutKnowledgeInput>
+}
+
+export type CampaignUpsertWithoutKnowledgeInput = {
+  update: Prisma.XOR<Prisma.CampaignUpdateWithoutKnowledgeInput, Prisma.CampaignUncheckedUpdateWithoutKnowledgeInput>
+  create: Prisma.XOR<Prisma.CampaignCreateWithoutKnowledgeInput, Prisma.CampaignUncheckedCreateWithoutKnowledgeInput>
+  where?: Prisma.CampaignWhereInput
+}
+
+export type CampaignUpdateToOneWithWhereWithoutKnowledgeInput = {
+  where?: Prisma.CampaignWhereInput
+  data: Prisma.XOR<Prisma.CampaignUpdateWithoutKnowledgeInput, Prisma.CampaignUncheckedUpdateWithoutKnowledgeInput>
+}
+
+export type CampaignUpdateWithoutKnowledgeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  message?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  defaultContext?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  avatarConfiguration?: Prisma.AvatarConfigurationUpdateOneWithoutCampaignsNestedInput
+  recipients?: Prisma.CampaignRecipientUpdateManyWithoutCampaignNestedInput
+}
+
+export type CampaignUncheckedUpdateWithoutKnowledgeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  message?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+  defaultContext?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  avatarConfigurationId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recipients?: Prisma.CampaignRecipientUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateManyAvatarConfigurationInput = {
@@ -621,6 +716,7 @@ export type CampaignUpdateWithoutAvatarConfigurationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipients?: Prisma.CampaignRecipientUpdateManyWithoutCampaignNestedInput
+  knowledge?: Prisma.CampaignKnowledgeUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutAvatarConfigurationInput = {
@@ -633,6 +729,7 @@ export type CampaignUncheckedUpdateWithoutAvatarConfigurationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipients?: Prisma.CampaignRecipientUncheckedUpdateManyWithoutCampaignNestedInput
+  knowledge?: Prisma.CampaignKnowledgeUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateManyWithoutAvatarConfigurationInput = {
@@ -653,10 +750,12 @@ export type CampaignUncheckedUpdateManyWithoutAvatarConfigurationInput = {
 
 export type CampaignCountOutputType = {
   recipients: number
+  knowledge: number
 }
 
 export type CampaignCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   recipients?: boolean | CampaignCountOutputTypeCountRecipientsArgs
+  knowledge?: boolean | CampaignCountOutputTypeCountKnowledgeArgs
 }
 
 /**
@@ -676,6 +775,13 @@ export type CampaignCountOutputTypeCountRecipientsArgs<ExtArgs extends runtime.T
   where?: Prisma.CampaignRecipientWhereInput
 }
 
+/**
+ * CampaignCountOutputType without action
+ */
+export type CampaignCountOutputTypeCountKnowledgeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CampaignKnowledgeWhereInput
+}
+
 
 export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -689,6 +795,7 @@ export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   avatarConfiguration?: boolean | Prisma.Campaign$avatarConfigurationArgs<ExtArgs>
   recipients?: boolean | Prisma.Campaign$recipientsArgs<ExtArgs>
+  knowledge?: boolean | Prisma.Campaign$knowledgeArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["campaign"]>
 
@@ -734,6 +841,7 @@ export type CampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type CampaignInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   avatarConfiguration?: boolean | Prisma.Campaign$avatarConfigurationArgs<ExtArgs>
   recipients?: boolean | Prisma.Campaign$recipientsArgs<ExtArgs>
+  knowledge?: boolean | Prisma.Campaign$knowledgeArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CampaignIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -748,6 +856,7 @@ export type $CampaignPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     avatarConfiguration: Prisma.$AvatarConfigurationPayload<ExtArgs> | null
     recipients: Prisma.$CampaignRecipientPayload<ExtArgs>[]
+    knowledge: Prisma.$CampaignKnowledgePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1155,6 +1264,7 @@ export interface Prisma__CampaignClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   avatarConfiguration<T extends Prisma.Campaign$avatarConfigurationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$avatarConfigurationArgs<ExtArgs>>): Prisma.Prisma__AvatarConfigurationClient<runtime.Types.Result.GetResult<Prisma.$AvatarConfigurationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   recipients<T extends Prisma.Campaign$recipientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$recipientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignRecipientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  knowledge<T extends Prisma.Campaign$knowledgeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$knowledgeArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignKnowledgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1634,6 +1744,30 @@ export type Campaign$recipientsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.CampaignRecipientScalarFieldEnum | Prisma.CampaignRecipientScalarFieldEnum[]
+}
+
+/**
+ * Campaign.knowledge
+ */
+export type Campaign$knowledgeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CampaignKnowledge
+   */
+  select?: Prisma.CampaignKnowledgeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the CampaignKnowledge
+   */
+  omit?: Prisma.CampaignKnowledgeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CampaignKnowledgeInclude<ExtArgs> | null
+  where?: Prisma.CampaignKnowledgeWhereInput
+  orderBy?: Prisma.CampaignKnowledgeOrderByWithRelationInput | Prisma.CampaignKnowledgeOrderByWithRelationInput[]
+  cursor?: Prisma.CampaignKnowledgeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CampaignKnowledgeScalarFieldEnum | Prisma.CampaignKnowledgeScalarFieldEnum[]
 }
 
 /**

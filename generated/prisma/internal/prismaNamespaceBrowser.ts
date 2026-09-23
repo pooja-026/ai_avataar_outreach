@@ -57,6 +57,9 @@ export const ModelName = {
   CampaignRecipient: 'CampaignRecipient',
   EmailDelivery: 'EmailDelivery',
   RecipientLink: 'RecipientLink',
+  KnowledgeDocument: 'KnowledgeDocument',
+  CampaignKnowledge: 'CampaignKnowledge',
+  KnowledgeChunk: 'KnowledgeChunk',
   AvatarSession: 'AvatarSession',
   ConversationMessage: 'ConversationMessage'
 } as const
@@ -166,6 +169,45 @@ export const RecipientLinkScalarFieldEnum = {
 } as const
 
 export type RecipientLinkScalarFieldEnum = (typeof RecipientLinkScalarFieldEnum)[keyof typeof RecipientLinkScalarFieldEnum]
+
+
+export const KnowledgeDocumentScalarFieldEnum = {
+  id: 'id',
+  filename: 'filename',
+  contentType: 'contentType',
+  fileSize: 'fileSize',
+  blobUrl: 'blobUrl',
+  status: 'status',
+  processingError: 'processingError',
+  chunkCount: 'chunkCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type KnowledgeDocumentScalarFieldEnum = (typeof KnowledgeDocumentScalarFieldEnum)[keyof typeof KnowledgeDocumentScalarFieldEnum]
+
+
+export const CampaignKnowledgeScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  documentId: 'documentId',
+  createdAt: 'createdAt'
+} as const
+
+export type CampaignKnowledgeScalarFieldEnum = (typeof CampaignKnowledgeScalarFieldEnum)[keyof typeof CampaignKnowledgeScalarFieldEnum]
+
+
+export const KnowledgeChunkScalarFieldEnum = {
+  id: 'id',
+  documentId: 'documentId',
+  sequence: 'sequence',
+  content: 'content',
+  embedding: 'embedding',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type KnowledgeChunkScalarFieldEnum = (typeof KnowledgeChunkScalarFieldEnum)[keyof typeof KnowledgeChunkScalarFieldEnum]
 
 
 export const AvatarSessionScalarFieldEnum = {
