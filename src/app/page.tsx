@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { getDb } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
 
 const navigation = [
   { label: "Overview", href: "/", active: true },
@@ -19,7 +22,19 @@ function ChevronIcon() {
   return <svg aria-hidden="true" className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6" /></svg>;
 }
 
-export default function Home() {
+export default async function Home() {
+  const [campaignCount, recipientCount, avatarSessionCount, avatarProfileCount] = await Promise.all([
+    getDb().campaign.count(),
+    getDb().recipient.count(),
+    getDb().avatarSession.count(),
+    getDb().avatarConfiguration.count(),
+  ]);
+  const summaryCards = [
+    ["Campaigns", String(campaignCount), campaignCount ? "Campaigns in your workspace" : "Ready for your first message"],
+    ["Recipients", String(recipientCount), recipientCount ? "Contacts available for outreach" : "No contacts added yet"],
+    ["Avatar sessions", String(avatarSessionCount), avatarSessionCount ? "Private sessions recorded" : "Private sessions will appear here"],
+    ["Avatar profiles", String(avatarProfileCount), avatarProfileCount ? "Configured avatar personas" : "Configure a persona when ready"],
+  ];
   return (
     <main className="min-h-screen bg-[#f6f8fb] text-slate-950">
       <div className="mx-auto flex min-h-screen max-w-[1600px]">
@@ -56,7 +71,7 @@ export default function Home() {
             </div>
 
             <section className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Workspace summary">
-              {[["Campaigns", "0", "Ready for your first message"], ["Recipients", "0", "No contacts added yet"], ["Avatar sessions", "0", "Private sessions will appear here"], ["Avatar profiles", "0", "Configure a persona when ready"]].map(([label, value, detail]) => (
+              {summaryCards.map(([label, value, detail]) => (
                 <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" key={label}><p className="text-sm font-medium text-slate-500">{label}</p><p className="mt-5 text-4xl font-semibold tracking-tight text-slate-950">{value}</p><p className="mt-3 text-xs text-slate-500">{detail}</p></article>
               ))}
             </section>
