@@ -1,11 +1,10 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
+import { classifyConversationIntent, directConversationResponse, NO_SOURCE_ANSWER, OUT_OF_SCOPE_ANSWER } from "@/lib/conversation-intent";
 import { retrieveCampaignKnowledge } from "@/lib/knowledge-processing";
 
 type Message = { role: "user" | "persona"; content: string };
-const NO_SOURCE_ANSWER = "I don't have that information in the material prepared for this conversation. I can help with another question about this campaign.";
-
 function notesFrom(value: unknown) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const notes = (value as { notes?: unknown }).notes;
@@ -34,6 +33,17 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
   if (!session || (session.recipientLink?.expiresAt && session.recipientLink.expiresAt <= new Date())) return NextResponse.json({ error: "Invitation unavailable." }, { status: 404 });
 
   try {
+    const directResponse = directConversationResponse(latestQuestion.content);
+    if (directResponse) return new Response(directResponse, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" } });
+
+    const intent = await classifyConversationIntent({
+      message: latestQuestion.content,
+      campaignName: session.campaignRecipient.campaign.name,
+      campaignMessage: session.campaignRecipient.campaign.message,
+    });
+    if (intent === "CONVERSATION") return new Response("I'm glad we're connected. How can I help you today?", { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" } });
+    if (intent === "OUT_OF_SCOPE") return new Response(OUT_OF_SCOPE_ANSWER, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" } });
+
     const sources = await retrieveCampaignKnowledge(session.campaignRecipient.campaignId, latestQuestion.content);
     if (!sources.length) return new Response(NO_SOURCE_ANSWER, { headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" } });
 
