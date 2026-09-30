@@ -36,19 +36,35 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
     syncTimerRef.current = setTimeout(() => { void saveConversation(); }, 600);
   }
 
+  function isLikelyInformationRequest(messages: Array<{ role: string; content: string }>) {
+    const latestUserMessage = [...messages].reverse().find((message) => message.role === "user")?.content.toLowerCase().trim() || "";
+    return latestUserMessage.includes("?") || /^(what|when|where|why|how|which|who|can|could|do|does|is|are|tell me|i want to know)\b/.test(latestUserMessage);
+  }
+
   async function answerWithCampaignKnowledge(messages: Array<{ id: string; role: string; content: string }>) {
     const latestUserMessage = [...messages].reverse().find((message) => message.role === "user");
     if (!latestUserMessage || latestUserMessage.id === lastProcessedUserMessageIdRef.current || !clientRef.current) return;
     lastProcessedUserMessageIdRef.current = latestUserMessage.id;
-    const response = await fetch(`/api/recipient-links/${encodeURIComponent(token)}/sessions/${encodeURIComponent(sessionIdRef.current || "")}/rag-reply`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: messages.map((message) => ({ role: message.role, content: message.content })) }),
-    });
-    const answer = (await response.text()).trim();
-    if (!response.ok || !answer) throw new Error("Unable to generate a grounded response.");
-    const talkStream = clientRef.current.createTalkMessageStream();
-    await talkStream.streamMessageChunk(answer, true);
+    let fillerSpoken = false;
+    const fillerTimer = isLikelyInformationRequest(messages) ? setTimeout(() => {
+      if (!clientRef.current || fillerSpoken) return;
+      fillerSpoken = true;
+      const fillerStream = clientRef.current.createTalkMessageStream();
+      void fillerStream.streamMessageChunk("Let me look into that for you.", true);
+    }, 900) : null;
+    try {
+      const response = await fetch(`/api/recipient-links/${encodeURIComponent(token)}/sessions/${encodeURIComponent(sessionIdRef.current || "")}/rag-reply`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: messages.map((message) => ({ role: message.role, content: message.content })) }),
+      });
+      const answer = (await response.text()).trim();
+      if (!response.ok || !answer) throw new Error("Unable to generate a grounded response.");
+      const talkStream = clientRef.current.createTalkMessageStream();
+      await talkStream.streamMessageChunk(answer, true);
+    } finally {
+      if (fillerTimer) clearTimeout(fillerTimer);
+    }
   }
 
   async function startConversation() {

@@ -49,21 +49,9 @@ async function readDocument(blobUrl: string, contentType: string) {
   return cleanText(buffer.toString("utf8"));
 }
 
-function asEmbedding(value: unknown): number[] | null {
-  return Array.isArray(value) && value.length > 0 && value.every((entry) => typeof entry === "number" && Number.isFinite(entry)) ? value : null;
-}
-
-function cosineSimilarity(left: number[], right: number[]) {
-  if (left.length !== right.length) return -1;
-  let dot = 0;
-  let leftMagnitude = 0;
-  let rightMagnitude = 0;
-  for (let index = 0; index < left.length; index += 1) {
-    dot += left[index] * right[index];
-    leftMagnitude += left[index] * left[index];
-    rightMagnitude += right[index] * right[index];
-  }
-  return leftMagnitude && rightMagnitude ? dot / (Math.sqrt(leftMagnitude) * Math.sqrt(rightMagnitude)) : -1;
+function vectorLiteral(embedding: number[]) {
+  if (embedding.length !== 1_536 || embedding.some((value) => !Number.isFinite(value))) throw new Error("Embedding service returned an invalid vector.");
+  return `[${embedding.join(",")}]`;
 }
 
 export async function processKnowledgeDocument(documentId: string) {
@@ -83,11 +71,14 @@ export async function processKnowledgeDocument(documentId: string) {
     });
     if (embeddings.data.length !== chunks.length) throw new Error("Embedding service returned incomplete data.");
 
-    await db.$transaction([
-      db.knowledgeChunk.deleteMany({ where: { documentId: document.id } }),
-      db.knowledgeChunk.createMany({ data: chunks.map((content, sequence) => ({ documentId: document.id, sequence, content, embedding: embeddings.data[sequence].embedding })) }),
-      db.knowledgeDocument.update({ where: { id: document.id }, data: { status: "READY", chunkCount: chunks.length, processingError: null } }),
-    ]);
+    await db.$transaction(async (transaction) => {
+      await transaction.knowledgeChunk.deleteMany({ where: { documentId: document.id } });
+      await transaction.knowledgeChunk.createMany({ data: chunks.map((content, sequence) => ({ documentId: document.id, sequence, content, embedding: embeddings.data[sequence].embedding })) });
+      for (const [sequence, item] of embeddings.data.entries()) {
+        await transaction.$executeRaw`UPDATE "KnowledgeChunk" SET "embeddingVector" = ${vectorLiteral(item.embedding)}::vector WHERE "documentId" = ${document.id}::uuid AND "sequence" = ${sequence}`;
+      }
+      await transaction.knowledgeDocument.update({ where: { id: document.id }, data: { status: "READY", chunkCount: chunks.length, processingError: null } });
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message.slice(0, 1_000) : "Document processing failed.";
     await db.knowledgeDocument.update({ where: { id: document.id }, data: { status: "FAILED", processingError: message } });
@@ -110,12 +101,18 @@ export async function retrieveCampaignKnowledge(campaignId: string, question: st
   const queryEmbedding = (await embeddingClient().embeddings.create({ model: process.env.OPENAI_EMBEDDING_MODEL || "text-embedding-3-small", input: query })).data[0]?.embedding;
   if (!queryEmbedding) return [];
 
-  const knowledge = await getDb().campaignKnowledge.findMany({
-    where: { campaignId, document: { status: "READY" } },
-    select: { document: { select: { filename: true, chunks: { select: { id: true, content: true, embedding: true } } } } },
-  });
-  return knowledge.flatMap(({ document }) => document.chunks.map((chunk) => ({ filename: document.filename, content: chunk.content, score: cosineSimilarity(queryEmbedding, asEmbedding(chunk.embedding) || []) })))
-    .filter((chunk) => chunk.score >= 0.2)
-    .sort((left, right) => right.score - left.score)
-    .slice(0, MAX_RETRIEVED_CHUNKS);
+  type VectorSearchRow = { filename: string; content: string; score: number };
+  const rows = await getDb().$queryRaw<VectorSearchRow[]>`
+    SELECT document."filename", chunk."content",
+      1 - (chunk."embeddingVector" <=> ${vectorLiteral(queryEmbedding)}::vector) AS score
+    FROM "KnowledgeChunk" AS chunk
+    INNER JOIN "KnowledgeDocument" AS document ON document."id" = chunk."documentId"
+    INNER JOIN "CampaignKnowledge" AS assignment ON assignment."documentId" = document."id"
+    WHERE assignment."campaignId" = ${campaignId}::uuid
+      AND document."status" = 'READY'
+      AND chunk."embeddingVector" IS NOT NULL
+    ORDER BY chunk."embeddingVector" <=> ${vectorLiteral(queryEmbedding)}::vector
+    LIMIT ${MAX_RETRIEVED_CHUNKS};
+  `;
+  return rows.filter((row) => Number(row.score) >= 0.2).map((row) => ({ ...row, score: Number(row.score) }));
 }
