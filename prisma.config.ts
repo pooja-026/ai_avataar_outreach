@@ -9,6 +9,8 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env.DATABASE_URL ?? "",
+    // Migrations require a direct connection for PostgreSQL advisory locks.
+    // Runtime requests remain on the pooled DATABASE_URL in src/lib/db.ts.
+    url: process.env.DIRECT_URL ?? process.env.DATABASE_URL ?? "",
   },
 });
