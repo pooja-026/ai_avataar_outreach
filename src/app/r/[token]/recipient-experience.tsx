@@ -45,23 +45,71 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
     const latestUserMessage = [...messages].reverse().find((message) => message.role === "user");
     if (!latestUserMessage || latestUserMessage.id === lastProcessedUserMessageIdRef.current || !clientRef.current) return;
     lastProcessedUserMessageIdRef.current = latestUserMessage.id;
+    const requestStartedAt = performance.now();
+    const talkStream = clientRef.current.createTalkMessageStream();
     let fillerSpoken = false;
+    let answerUtteranceStarted = false;
+    let speechQueue = Promise.resolve();
+    const queueSpeech = (text: string, utteranceId?: string) => {
+      speechQueue = speechQueue.then(() => talkStream.streamMessageChunk(text, false, utteranceId));
+      return speechQueue;
+    };
     const fillerTimer = isLikelyInformationRequest(messages) ? setTimeout(() => {
-      if (!clientRef.current || fillerSpoken) return;
+      if (fillerSpoken) return;
       fillerSpoken = true;
-      const fillerStream = clientRef.current.createTalkMessageStream();
-      void fillerStream.streamMessageChunk("Let me look into that for you.", true);
-    }, 900) : null;
+      void queueSpeech("Let me look into that for you.", crypto.randomUUID());
+    }, 600) : null;
     try {
       const response = await fetch(`/api/recipient-links/${encodeURIComponent(token)}/sessions/${encodeURIComponent(sessionIdRef.current || "")}/rag-reply`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: messages.map((message) => ({ role: message.role, content: message.content })) }),
       });
-      const answer = (await response.text()).trim();
-      if (!response.ok || !answer) throw new Error("Unable to generate a grounded response.");
-      const talkStream = clientRef.current.createTalkMessageStream();
-      await talkStream.streamMessageChunk(answer, true);
+      if (!response.ok || !response.body) throw new Error("Unable to generate a grounded response.");
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let pendingText = "";
+      let receivedText = "";
+      let firstResponseChunkAt: number | null = null;
+      let firstSpeechChunkAt: number | null = null;
+
+      const flushSpeakableText = async (final = false) => {
+        while (pendingText) {
+          const sentenceEnd = pendingText.search(/[.!?](?=\s|$)/);
+          const longPhraseEnd = pendingText.length >= 150 ? pendingText.lastIndexOf(" ", 150) : -1;
+          const end = sentenceEnd >= 0 ? sentenceEnd + 1 : longPhraseEnd > 40 ? longPhraseEnd : final ? pendingText.length : 0;
+          if (!end) return;
+          const speech = pendingText.slice(0, end).trim();
+          pendingText = pendingText.slice(end).trimStart();
+          if (!speech) continue;
+          if (firstSpeechChunkAt === null) firstSpeechChunkAt = performance.now();
+          await queueSpeech(speech, fillerSpoken && !answerUtteranceStarted ? crypto.randomUUID() : undefined);
+          answerUtteranceStarted = true;
+        }
+      };
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const text = decoder.decode(value, { stream: true });
+        if (!text) continue;
+        if (firstResponseChunkAt === null) firstResponseChunkAt = performance.now();
+        receivedText += text;
+        pendingText += text;
+        await flushSpeakableText();
+      }
+      pendingText += decoder.decode();
+      await flushSpeakableText(true);
+      if (!receivedText.trim()) throw new Error("Unable to generate a grounded response.");
+      await speechQueue;
+      await talkStream.endMessage();
+      console.info("avatar_turn_latency", {
+        responseFirstChunkMs: firstResponseChunkAt === null ? null : Math.round(firstResponseChunkAt - requestStartedAt),
+        avatarFirstSpeechQueuedMs: firstSpeechChunkAt === null ? null : Math.round(firstSpeechChunkAt - requestStartedAt),
+        totalResponseMs: Math.round(performance.now() - requestStartedAt),
+        serverTiming: response.headers.get("Server-Timing"),
+      });
     } finally {
       if (fillerTimer) clearTimeout(fillerTimer);
     }
