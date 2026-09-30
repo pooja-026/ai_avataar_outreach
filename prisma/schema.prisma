@@ -193,6 +193,7 @@ model KnowledgeChunk {
   sequence    Int
   content     String            @db.Text
   embedding   Json?
+  embeddingVector Unsupported("vector(1536)")? @map("embeddingVector")
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
 
