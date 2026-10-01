@@ -1,7 +1,7 @@
 "use client";
 
 import { AnamEvent, createClient } from "@anam-ai/js-sdk";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = { firstName: string | null; campaignName: string; message: string; token: string };
 type State = "welcome" | "connecting" | "live" | "error";
@@ -18,6 +18,13 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
   const syncTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const finalizedRef = useRef(false);
   const lastProcessedUserMessageIdRef = useRef<string | null>(null);
+  const answerControllerRef = useRef<AbortController | null>(null);
+  useEffect(() => () => {
+    answerControllerRef.current?.abort();
+    if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
+    void clientRef.current?.stopStreaming();
+    audioRef.current?.getTracks().forEach((track) => track.stop());
+  }, []);
   const greeting = firstName ? `Welcome, ${firstName}` : "Welcome";
 
   async function saveConversation(ended = false) {
@@ -36,34 +43,35 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
     syncTimerRef.current = setTimeout(() => { void saveConversation(); }, 600);
   }
 
-  function isLikelyInformationRequest(messages: Array<{ role: string; content: string }>) {
-    const latestUserMessage = [...messages].reverse().find((message) => message.role === "user")?.content.toLowerCase().trim() || "";
-    return latestUserMessage.includes("?") || /^(what|when|where|why|how|which|who|can|could|do|does|is|are|tell me|i want to know)\b/.test(latestUserMessage);
+  function cancelAnswer() {
+    answerControllerRef.current?.abort();
+    answerControllerRef.current = null;
+    clientRef.current?.interruptPersona();
   }
 
   async function answerWithCampaignKnowledge(messages: Array<{ id: string; role: string; content: string }>) {
     const latestUserMessage = [...messages].reverse().find((message) => message.role === "user");
     if (!latestUserMessage || latestUserMessage.id === lastProcessedUserMessageIdRef.current || !clientRef.current) return;
     lastProcessedUserMessageIdRef.current = latestUserMessage.id;
+    cancelAnswer();
+    const controller = new AbortController();
+    answerControllerRef.current = controller;
     const requestStartedAt = performance.now();
     const talkStream = clientRef.current.createTalkMessageStream();
-    let fillerSpoken = false;
-    let answerUtteranceStarted = false;
     let speechQueue = Promise.resolve();
-    const queueSpeech = (text: string, utteranceId?: string) => {
-      speechQueue = speechQueue.then(() => talkStream.streamMessageChunk(text, false, utteranceId));
+    const queueSpeech = (text: string) => {
+      speechQueue = speechQueue.then(() => {
+        controller.signal.throwIfAborted();
+        return talkStream.streamMessageChunk(`${text} `, false);
+      });
       return speechQueue;
     };
-    const fillerTimer = isLikelyInformationRequest(messages) ? setTimeout(() => {
-      if (fillerSpoken) return;
-      fillerSpoken = true;
-      void queueSpeech("Let me look into that for you.", crypto.randomUUID());
-    }, 600) : null;
     try {
       const response = await fetch(`/api/recipient-links/${encodeURIComponent(token)}/sessions/${encodeURIComponent(sessionIdRef.current || "")}/rag-reply`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: messages.map((message) => ({ role: message.role, content: message.content })) }),
+        signal: controller.signal,
       });
       if (!response.ok || !response.body) throw new Error("Unable to generate a grounded response.");
 
@@ -84,8 +92,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
           pendingText = pendingText.slice(end).trimStart();
           if (!speech) continue;
           if (firstSpeechChunkAt === null) firstSpeechChunkAt = performance.now();
-          await queueSpeech(speech, fillerSpoken && !answerUtteranceStarted ? crypto.randomUUID() : undefined);
-          answerUtteranceStarted = true;
+          await queueSpeech(speech);
         }
       };
 
@@ -103,6 +110,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
       await flushSpeakableText(true);
       if (!receivedText.trim()) throw new Error("Unable to generate a grounded response.");
       await speechQueue;
+      controller.signal.throwIfAborted();
       await talkStream.endMessage();
       console.info("avatar_turn_latency", {
         responseFirstChunkMs: firstResponseChunkAt === null ? null : Math.round(firstResponseChunkAt - requestStartedAt),
@@ -110,8 +118,13 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
         totalResponseMs: Math.round(performance.now() - requestStartedAt),
         serverTiming: response.headers.get("Server-Timing"),
       });
+    } catch (cause) {
+      if (!controller.signal.aborted) {
+        clientRef.current?.interruptPersona();
+        throw cause;
+      }
     } finally {
-      if (fillerTimer) clearTimeout(fillerTimer);
+      if (answerControllerRef.current === controller) answerControllerRef.current = null;
     }
   }
 
@@ -131,6 +144,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
       finalizedRef.current = false;
       const client = createClient(body.sessionToken);
       clientRef.current = client;
+      client.addListener(AnamEvent.USER_SPEECH_STARTED, cancelAnswer);
       client.addListener(AnamEvent.SESSION_READY, (providerSessionId: string) => { providerSessionIdRef.current = providerSessionId; });
       client.addListener(AnamEvent.MESSAGE_HISTORY_UPDATED, (messages) => {
         messageHistoryRef.current = messages.map((message) => ({ role: message.role, content: message.content })).filter((message) => (message.role === "user" || message.role === "persona") && Boolean(message.content?.trim()));
@@ -138,6 +152,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
         void answerWithCampaignKnowledge(messages).catch(() => setError("We could not prepare a grounded answer. Please try again."));
       });
       client.addListener(AnamEvent.CONNECTION_CLOSED, () => {
+        answerControllerRef.current?.abort();
         if (!finalizedRef.current) {
           finalizedRef.current = true;
           void saveConversation(true);
@@ -153,6 +168,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
   }
 
   async function stopConversation() {
+    cancelAnswer();
     if (syncTimerRef.current) clearTimeout(syncTimerRef.current);
     finalizedRef.current = true;
     await saveConversation(true);

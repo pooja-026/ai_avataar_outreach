@@ -15,6 +15,8 @@ function normalize(message: string) {
  */
 export function directConversationResponse(message: string): string | null {
   const value = normalize(message);
+  if (/^(i said )?(no worries|it s okay|it s ok|no worries it s okay|no worries it s ok)$/.test(value)) return "No problem. Take your time.";
+  if (/^(are you trying to say something|were you saying something)$/.test(value)) return "Sorry for the interruption. Please go ahead.";
   if (/^(hi|hey|hello|hi there|hello there|hey there)$/.test(value)) return "Hi! It's great to connect. How can I help you today?";
   if (/^(thanks|thank you|thank you so much|thanks so much)$/.test(value)) return "You're very welcome!";
   if (/^(okay|ok|got it|okay got it|ok got it|i understand)$/.test(value)) return "Great! Let me know if you'd like to explore anything further.";
