@@ -10,6 +10,8 @@ import { KnowledgeBasePanel } from "../knowledge-base-panel";
 import { deleteKnowledgeDocument, prepareCampaignKnowledge, uploadKnowledgeDocument } from "../knowledge-actions";
 
 export const dynamic = "force-dynamic";
+// Server actions on this page (including background knowledge preparation via after()) may run this long.
+export const maxDuration = 300;
 
 type SearchParams = {
   created?: string; saved?: string; error?: string; recipientAdded?: string; linkCreated?: string; linkRevoked?: string;
@@ -32,10 +34,11 @@ export default async function CampaignDetailPage({ params, searchParams }: { par
   if (!campaign) notFound();
 
   const knowledgeNotice = query.knowledge === "uploaded" ? "Documents uploaded privately. Prepare them before the avatar can use them."
-    : query.knowledge === "processed" ? "Knowledge is ready. The avatar can now retrieve these campaign sources."
-    : query.knowledge === "partiallyProcessed" ? "Some documents could not be prepared. Review the failed documents and try again."
+    : query.knowledge === "processing" ? "Preparing documents in the background. Progress updates below automatically."
+    : query.knowledge === "nothingToProcess" ? "All documents are already prepared or being prepared."
     : query.knowledge === "deleted" ? "Document removed."
       : query.knowledgeError === "file" ? "Unable to upload those files. Use supported file types with a 4 MB combined maximum."
+        : query.knowledgeError === "blobConfig" ? "Unable to upload: no Vercel Blob credentials found. Set BLOB_READ_WRITE_TOKEN, or BLOB_STORE_ID with VERCEL_OIDC_TOKEN (run `vercel env pull`)."
         : query.knowledgeError === "storage" ? "Unable to store the document. Check the private Blob configuration and try again."
           : query.knowledgeError === "processing" ? "Unable to prepare the knowledge documents. Check the OpenAI key and document content, then try again."
           : undefined;
@@ -47,7 +50,7 @@ export default async function CampaignDetailPage({ params, searchParams }: { par
       {(query.created === "1" || query.saved === "1") && <p className="mt-6 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">Saved.</p>}
       <div className="mt-8"><CampaignForm action={updateCampaign.bind(null, campaign.id)} campaign={campaign} error={query.error} submitLabel="Save changes" /></div>
     </section>
-    <KnowledgeBasePanel campaignId={campaign.id} deleteAction={deleteKnowledgeDocument.bind(null, campaign.id)} documents={knowledge.map(({ document }) => ({ id: document.id, filename: document.filename, contentType: document.contentType, fileSize: document.fileSize, status: document.status, chunkCount: document.chunkCount }))} notice={knowledgeNotice} prepareAction={prepareCampaignKnowledge.bind(null, campaign.id)} uploadAction={uploadKnowledgeDocument.bind(null, campaign.id)} />
+    <KnowledgeBasePanel campaignId={campaign.id} deleteAction={deleteKnowledgeDocument.bind(null, campaign.id)} documents={knowledge.map(({ document }) => ({ id: document.id, filename: document.filename, contentType: document.contentType, fileSize: document.fileSize, status: document.status, chunkCount: document.chunkCount, processedChunkCount: document.processedChunkCount, processingError: document.processingError }))} notice={knowledgeNotice} prepareAction={prepareCampaignKnowledge.bind(null, campaign.id)} uploadAction={uploadKnowledgeDocument.bind(null, campaign.id)} />
     <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
       <p className="text-xs font-semibold tracking-[.14em] text-indigo-600 uppercase">Recipients</p><h2 className="mt-3 text-2xl font-semibold">Assign people and issue links</h2>
       {query.sent === "1" && <p className="mt-5 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">Email sent.</p>}

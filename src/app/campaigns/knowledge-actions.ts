@@ -3,8 +3,9 @@
 import { del, put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { getDb } from "@/lib/db";
-import { processCampaignKnowledge } from "@/lib/knowledge-processing";
+import { claimCampaignKnowledge, processKnowledgeDocuments } from "@/lib/knowledge-processing";
 
 const MAX_BATCH_SIZE = 4 * 1024 * 1024;
 const ACCEPTED_TYPES = new Set([
@@ -25,6 +26,8 @@ export async function uploadKnowledgeDocument(campaignId: string, formData: Form
     redirect(`/campaigns/${campaignId}?knowledgeError=file`);
   }
 
+  // @vercel/blob authenticates with either a read-write token or OIDC (BLOB_STORE_ID + VERCEL_OIDC_TOKEN, supplied on Vercel).
+  if (!process.env.BLOB_READ_WRITE_TOKEN && !process.env.BLOB_STORE_ID) redirect(`/campaigns/${campaignId}?knowledgeError=blobConfig`);
   const campaign = await getDb().campaign.findUnique({ where: { id: campaignId }, select: { id: true } });
   if (!campaign) redirect("/campaigns");
 
@@ -43,7 +46,7 @@ export async function uploadKnowledgeDocument(campaignId: string, formData: Form
       await getDb().campaignKnowledge.create({ data: { campaignId, documentId: document.id } });
     }
   } catch (error) {
-    console.error("Knowledge document upload failed", error instanceof Error ? error.name : "unknown");
+    console.error("Knowledge document upload failed", error instanceof Error ? `${error.name}: ${error.message}` : "unknown");
     redirect(`/campaigns/${campaignId}?knowledgeError=storage`);
   }
 
@@ -68,13 +71,23 @@ export async function deleteKnowledgeDocument(campaignId: string, formData: Form
 }
 
 export async function prepareCampaignKnowledge(campaignId: string) {
-  let result: { processed: number; failed: number };
+  if (!process.env.OPENAI_API_KEY) redirect(`/campaigns/${campaignId}?knowledgeError=processing`);
+  let documentIds: string[];
   try {
-    result = await processCampaignKnowledge(campaignId);
+    documentIds = await claimCampaignKnowledge(campaignId);
   } catch (error) {
-    console.error("Campaign knowledge processing failed", error instanceof Error ? error.name : "unknown");
+    console.error("Campaign knowledge claim failed", error instanceof Error ? error.name : "unknown");
     redirect(`/campaigns/${campaignId}?knowledgeError=processing`);
   }
+
+  // Runs after the redirect is sent, bounded by the campaign page's maxDuration.
+  // The admin page polls for progress while documents are PROCESSING.
+  if (documentIds.length) {
+    after(async () => {
+      const result = await processKnowledgeDocuments(documentIds);
+      console.info("knowledge_processing_complete", { campaignId, ...result });
+    });
+  }
   refreshCampaign(campaignId);
-  redirect(`/campaigns/${campaignId}?knowledge=${result.failed ? "partiallyProcessed" : "processed"}`);
+  redirect(`/campaigns/${campaignId}?knowledge=${documentIds.length ? "processing" : "nothingToProcess"}`);
 }

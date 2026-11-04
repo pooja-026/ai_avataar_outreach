@@ -7,6 +7,10 @@ import { getDb } from "@/lib/db";
 const CHUNK_SIZE = 900;
 const CHUNK_OVERLAP = 160;
 const MAX_RETRIEVED_CHUNKS = 4;
+const EMBEDDING_BATCH_SIZE = 96;
+const DOCUMENT_CONCURRENCY = 2;
+// Longer than the campaign page's maxDuration (300s), so a live worker is never reclaimed.
+const STALE_PROCESSING_MS = 10 * 60 * 1000;
 
 function cleanText(value: string) {
   return value.replace(/\u0000/g, "").replace(/\r\n/g, "\n").replace(/[ \t]+/g, " ").replace(/\n{3,}/g, "\n\n").trim();
@@ -54,45 +58,103 @@ function vectorLiteral(embedding: number[]) {
   return `[${embedding.join(",")}]`;
 }
 
+function claimableDocumentFilter() {
+  // A PROCESSING document older than this was abandoned by a worker that hit
+  // its time limit or crashed, so it is safe to claim again.
+  const staleBefore = new Date(Date.now() - STALE_PROCESSING_MS);
+  return [
+    { status: { in: ["UPLOADED", "FAILED"] as Array<"UPLOADED" | "FAILED"> } },
+    { status: "PROCESSING" as const, OR: [{ processingStartedAt: null }, { processingStartedAt: { lt: staleBefore } }] },
+  ];
+}
+
+/**
+ * Atomically marks a campaign's unprepared documents as PROCESSING and returns
+ * the IDs this caller now owns. Two admins clicking "Prepare" at once cannot
+ * both process the same document.
+ */
+export async function claimCampaignKnowledge(campaignId: string) {
+  const db = getDb();
+  const candidates = await db.campaignKnowledge.findMany({
+    where: { campaignId, document: { OR: claimableDocumentFilter() } },
+    select: { documentId: true },
+  });
+  const claimed: string[] = [];
+  for (const { documentId } of candidates) {
+    const { count } = await db.knowledgeDocument.updateMany({
+      where: { id: documentId, OR: claimableDocumentFilter() },
+      data: { status: "PROCESSING", processingStartedAt: new Date(), processingError: null, chunkCount: 0, processedChunkCount: 0 },
+    });
+    if (count) claimed.push(documentId);
+  }
+  return claimed;
+}
+
+async function insertChunkBatch(documentId: string, firstSequence: number, contents: string[], embeddings: number[][]) {
+  const sequences = contents.map((_, index) => firstSequence + index);
+  const vectors = embeddings.map(vectorLiteral);
+  // One statement per batch instead of one UPDATE per chunk.
+  await getDb().$executeRaw`
+    INSERT INTO "KnowledgeChunk" ("id", "documentId", "sequence", "content", "embeddingVector", "updatedAt")
+    SELECT gen_random_uuid(), ${documentId}::uuid, batch.sequence, batch.content, batch.vector::vector, NOW()
+    FROM unnest(${sequences}::int[], ${contents}::text[], ${vectors}::text[]) AS batch(sequence, content, vector)
+  `;
+}
+
+/** Prepares one already-claimed document. Never throws; failures are recorded on the document. */
 export async function processKnowledgeDocument(documentId: string) {
   const db = getDb();
   const document = await db.knowledgeDocument.findUnique({ where: { id: documentId } });
-  if (!document) throw new Error("Knowledge document was not found.");
+  if (!document) return { ok: false as const };
 
-  await db.knowledgeDocument.update({ where: { id: document.id }, data: { status: "PROCESSING", processingError: null } });
   try {
     const text = await readDocument(document.blobUrl, document.contentType);
     const chunks = splitIntoChunks(text);
     if (!chunks.length) throw new Error("No readable text was found in this document.");
 
-    const embeddings = await embeddingClient().embeddings.create({
-      model: process.env.OPENAI_EMBEDDING_MODEL || "text-embedding-3-small",
-      input: chunks,
-    });
-    if (embeddings.data.length !== chunks.length) throw new Error("Embedding service returned incomplete data.");
+    await db.knowledgeChunk.deleteMany({ where: { documentId } });
+    await db.knowledgeDocument.update({ where: { id: documentId }, data: { chunkCount: chunks.length, processedChunkCount: 0 } });
 
-    await db.$transaction(async (transaction) => {
-      await transaction.knowledgeChunk.deleteMany({ where: { documentId: document.id } });
-      await transaction.knowledgeChunk.createMany({ data: chunks.map((content, sequence) => ({ documentId: document.id, sequence, content, embedding: embeddings.data[sequence].embedding })) });
-      for (const [sequence, item] of embeddings.data.entries()) {
-        await transaction.$executeRaw`UPDATE "KnowledgeChunk" SET "embeddingVector" = ${vectorLiteral(item.embedding)}::vector WHERE "documentId" = ${document.id}::uuid AND "sequence" = ${sequence}`;
-      }
-      await transaction.knowledgeDocument.update({ where: { id: document.id }, data: { status: "READY", chunkCount: chunks.length, processingError: null } });
-    });
+    const client = embeddingClient();
+    const model = process.env.OPENAI_EMBEDDING_MODEL || "text-embedding-3-small";
+    for (let start = 0; start < chunks.length; start += EMBEDDING_BATCH_SIZE) {
+      const batch = chunks.slice(start, start + EMBEDDING_BATCH_SIZE);
+      const response = await client.embeddings.create({ model, input: batch });
+      const embeddings = [...response.data].sort((a, b) => a.index - b.index).map((item) => item.embedding);
+      if (embeddings.length !== batch.length) throw new Error("Embedding service returned incomplete data.");
+      await insertChunkBatch(documentId, start, batch, embeddings);
+      await db.knowledgeDocument.update({ where: { id: documentId }, data: { processedChunkCount: start + batch.length } });
+    }
+
+    await db.knowledgeDocument.update({ where: { id: documentId }, data: { status: "READY", processingError: null, processingStartedAt: null } });
+    return { ok: true as const };
   } catch (error) {
+    console.error("Knowledge document processing failed", { documentId, error: error instanceof Error ? error.name : "unknown" });
     const message = error instanceof Error ? error.message.slice(0, 1_000) : "Document processing failed.";
-    await db.knowledgeDocument.update({ where: { id: document.id }, data: { status: "FAILED", processingError: message } });
-    throw error;
+    try {
+      // Partial chunks are invisible to retrieval (only READY documents are searched), but remove them anyway.
+      await db.knowledgeChunk.deleteMany({ where: { documentId } });
+      await db.knowledgeDocument.update({ where: { id: documentId }, data: { status: "FAILED", processingError: message, processingStartedAt: null } });
+    } catch {
+      // The document may have been deleted while it was processing.
+    }
+    return { ok: false as const };
   }
 }
 
-export async function processCampaignKnowledge(campaignId: string) {
-  const documents = await getDb().campaignKnowledge.findMany({
-    where: { campaignId, document: { status: { in: ["UPLOADED", "FAILED"] } } },
-    select: { documentId: true },
-  });
-  const outcomes = await Promise.allSettled(documents.map(({ documentId }) => processKnowledgeDocument(documentId)));
-  return { processed: outcomes.filter((outcome) => outcome.status === "fulfilled").length, failed: outcomes.filter((outcome) => outcome.status === "rejected").length };
+/** Processes claimed documents with bounded concurrency to stay within embedding rate limits. */
+export async function processKnowledgeDocuments(documentIds: string[]) {
+  const queue = [...documentIds];
+  let processed = 0;
+  let failed = 0;
+  const worker = async () => {
+    for (let documentId = queue.shift(); documentId; documentId = queue.shift()) {
+      if ((await processKnowledgeDocument(documentId)).ok) processed++;
+      else failed++;
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(DOCUMENT_CONCURRENCY, queue.length) }, worker));
+  return { processed, failed };
 }
 
 export async function retrieveCampaignKnowledge(campaignId: string, question: string) {

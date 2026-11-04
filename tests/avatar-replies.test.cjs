@@ -7,13 +7,13 @@ const ts = require('typescript');
 
 // Exercise the actual route and component with offline service/SDK doubles.
 function load(file, mocks = {}) {
-  const module = { exports: {} };
+  const loaded = { exports: {} };
   const code = ts.transpileModule(fs.readFileSync(file, 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX, target: ts.ScriptTarget.ES2022, esModuleInterop: true },
   }).outputText;
   const run = vm.runInThisContext(`(function(require, module, exports) { ${code}\n})`, { filename: file });
-  run((name) => name in mocks ? mocks[name] : require(name), module, module.exports);
-  return module.exports;
+  run((name) => name in mocks ? mocks[name] : require(name), loaded, loaded.exports);
+  return loaded.exports;
 }
 
 const intent = load('src/lib/conversation-intent.ts');

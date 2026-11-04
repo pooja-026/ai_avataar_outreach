@@ -180,6 +180,8 @@ export const KnowledgeDocumentScalarFieldEnum = {
   status: 'status',
   processingError: 'processingError',
   chunkCount: 'chunkCount',
+  processedChunkCount: 'processedChunkCount',
+  processingStartedAt: 'processingStartedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
