@@ -167,6 +167,8 @@ model KnowledgeDocument {
   status          KnowledgeDocumentStatus @default(UPLOADED)
   processingError String?                 @db.Text
   chunkCount      Int                     @default(0)
+  processedChunkCount Int                 @default(0)
+  processingStartedAt DateTime?
   createdAt       DateTime                @default(now())
   updatedAt       DateTime                @updatedAt
 
@@ -193,6 +195,9 @@ model KnowledgeChunk {
   sequence    Int
   content     String            @db.Text
   embedding   Json?
+  // Indexed by "KnowledgeChunk_embeddingVector_hnsw_idx" (HNSW, created in raw SQL).
+  // Prisma cannot model it, so `migrate dev` proposes DROP INDEX for it: delete that
+  // line from any generated migration before applying. See package.json db:migrate.
   embeddingVector Unsupported("vector(1536)")? @map("embeddingVector")
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt

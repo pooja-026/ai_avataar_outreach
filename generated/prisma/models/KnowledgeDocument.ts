@@ -29,11 +29,13 @@ export type AggregateKnowledgeDocument = {
 export type KnowledgeDocumentAvgAggregateOutputType = {
   fileSize: number | null
   chunkCount: number | null
+  processedChunkCount: number | null
 }
 
 export type KnowledgeDocumentSumAggregateOutputType = {
   fileSize: number | null
   chunkCount: number | null
+  processedChunkCount: number | null
 }
 
 export type KnowledgeDocumentMinAggregateOutputType = {
@@ -45,6 +47,8 @@ export type KnowledgeDocumentMinAggregateOutputType = {
   status: $Enums.KnowledgeDocumentStatus | null
   processingError: string | null
   chunkCount: number | null
+  processedChunkCount: number | null
+  processingStartedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -58,6 +62,8 @@ export type KnowledgeDocumentMaxAggregateOutputType = {
   status: $Enums.KnowledgeDocumentStatus | null
   processingError: string | null
   chunkCount: number | null
+  processedChunkCount: number | null
+  processingStartedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -71,6 +77,8 @@ export type KnowledgeDocumentCountAggregateOutputType = {
   status: number
   processingError: number
   chunkCount: number
+  processedChunkCount: number
+  processingStartedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -80,11 +88,13 @@ export type KnowledgeDocumentCountAggregateOutputType = {
 export type KnowledgeDocumentAvgAggregateInputType = {
   fileSize?: true
   chunkCount?: true
+  processedChunkCount?: true
 }
 
 export type KnowledgeDocumentSumAggregateInputType = {
   fileSize?: true
   chunkCount?: true
+  processedChunkCount?: true
 }
 
 export type KnowledgeDocumentMinAggregateInputType = {
@@ -96,6 +106,8 @@ export type KnowledgeDocumentMinAggregateInputType = {
   status?: true
   processingError?: true
   chunkCount?: true
+  processedChunkCount?: true
+  processingStartedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -109,6 +121,8 @@ export type KnowledgeDocumentMaxAggregateInputType = {
   status?: true
   processingError?: true
   chunkCount?: true
+  processedChunkCount?: true
+  processingStartedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -122,6 +136,8 @@ export type KnowledgeDocumentCountAggregateInputType = {
   status?: true
   processingError?: true
   chunkCount?: true
+  processedChunkCount?: true
+  processingStartedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -222,6 +238,8 @@ export type KnowledgeDocumentGroupByOutputType = {
   status: $Enums.KnowledgeDocumentStatus
   processingError: string | null
   chunkCount: number
+  processedChunkCount: number
+  processingStartedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: KnowledgeDocumentCountAggregateOutputType | null
@@ -258,6 +276,8 @@ export type KnowledgeDocumentWhereInput = {
   status?: Prisma.EnumKnowledgeDocumentStatusFilter<"KnowledgeDocument"> | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.StringNullableFilter<"KnowledgeDocument"> | string | null
   chunkCount?: Prisma.IntFilter<"KnowledgeDocument"> | number
+  processedChunkCount?: Prisma.IntFilter<"KnowledgeDocument"> | number
+  processingStartedAt?: Prisma.DateTimeNullableFilter<"KnowledgeDocument"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"KnowledgeDocument"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"KnowledgeDocument"> | Date | string
   campaigns?: Prisma.CampaignKnowledgeListRelationFilter
@@ -273,6 +293,8 @@ export type KnowledgeDocumentOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   processingError?: Prisma.SortOrderInput | Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
+  processedChunkCount?: Prisma.SortOrder
+  processingStartedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   campaigns?: Prisma.CampaignKnowledgeOrderByRelationAggregateInput
@@ -291,6 +313,8 @@ export type KnowledgeDocumentWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumKnowledgeDocumentStatusFilter<"KnowledgeDocument"> | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.StringNullableFilter<"KnowledgeDocument"> | string | null
   chunkCount?: Prisma.IntFilter<"KnowledgeDocument"> | number
+  processedChunkCount?: Prisma.IntFilter<"KnowledgeDocument"> | number
+  processingStartedAt?: Prisma.DateTimeNullableFilter<"KnowledgeDocument"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"KnowledgeDocument"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"KnowledgeDocument"> | Date | string
   campaigns?: Prisma.CampaignKnowledgeListRelationFilter
@@ -306,6 +330,8 @@ export type KnowledgeDocumentOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   processingError?: Prisma.SortOrderInput | Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
+  processedChunkCount?: Prisma.SortOrder
+  processingStartedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.KnowledgeDocumentCountOrderByAggregateInput
@@ -327,6 +353,8 @@ export type KnowledgeDocumentScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumKnowledgeDocumentStatusWithAggregatesFilter<"KnowledgeDocument"> | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.StringNullableWithAggregatesFilter<"KnowledgeDocument"> | string | null
   chunkCount?: Prisma.IntWithAggregatesFilter<"KnowledgeDocument"> | number
+  processedChunkCount?: Prisma.IntWithAggregatesFilter<"KnowledgeDocument"> | number
+  processingStartedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"KnowledgeDocument"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"KnowledgeDocument"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"KnowledgeDocument"> | Date | string
 }
@@ -340,6 +368,8 @@ export type KnowledgeDocumentCreateInput = {
   status?: $Enums.KnowledgeDocumentStatus
   processingError?: string | null
   chunkCount?: number
+  processedChunkCount?: number
+  processingStartedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   campaigns?: Prisma.CampaignKnowledgeCreateNestedManyWithoutDocumentInput
@@ -355,6 +385,8 @@ export type KnowledgeDocumentUncheckedCreateInput = {
   status?: $Enums.KnowledgeDocumentStatus
   processingError?: string | null
   chunkCount?: number
+  processedChunkCount?: number
+  processingStartedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   campaigns?: Prisma.CampaignKnowledgeUncheckedCreateNestedManyWithoutDocumentInput
@@ -370,6 +402,8 @@ export type KnowledgeDocumentUpdateInput = {
   status?: Prisma.EnumKnowledgeDocumentStatusFieldUpdateOperationsInput | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processedChunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processingStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaigns?: Prisma.CampaignKnowledgeUpdateManyWithoutDocumentNestedInput
@@ -385,6 +419,8 @@ export type KnowledgeDocumentUncheckedUpdateInput = {
   status?: Prisma.EnumKnowledgeDocumentStatusFieldUpdateOperationsInput | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processedChunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processingStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaigns?: Prisma.CampaignKnowledgeUncheckedUpdateManyWithoutDocumentNestedInput
@@ -400,6 +436,8 @@ export type KnowledgeDocumentCreateManyInput = {
   status?: $Enums.KnowledgeDocumentStatus
   processingError?: string | null
   chunkCount?: number
+  processedChunkCount?: number
+  processingStartedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -413,6 +451,8 @@ export type KnowledgeDocumentUpdateManyMutationInput = {
   status?: Prisma.EnumKnowledgeDocumentStatusFieldUpdateOperationsInput | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processedChunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processingStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -426,6 +466,8 @@ export type KnowledgeDocumentUncheckedUpdateManyInput = {
   status?: Prisma.EnumKnowledgeDocumentStatusFieldUpdateOperationsInput | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processedChunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processingStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -439,6 +481,8 @@ export type KnowledgeDocumentCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   processingError?: Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
+  processedChunkCount?: Prisma.SortOrder
+  processingStartedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -446,6 +490,7 @@ export type KnowledgeDocumentCountOrderByAggregateInput = {
 export type KnowledgeDocumentAvgOrderByAggregateInput = {
   fileSize?: Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
+  processedChunkCount?: Prisma.SortOrder
 }
 
 export type KnowledgeDocumentMaxOrderByAggregateInput = {
@@ -457,6 +502,8 @@ export type KnowledgeDocumentMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   processingError?: Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
+  processedChunkCount?: Prisma.SortOrder
+  processingStartedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -470,6 +517,8 @@ export type KnowledgeDocumentMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   processingError?: Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
+  processedChunkCount?: Prisma.SortOrder
+  processingStartedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -477,6 +526,7 @@ export type KnowledgeDocumentMinOrderByAggregateInput = {
 export type KnowledgeDocumentSumOrderByAggregateInput = {
   fileSize?: Prisma.SortOrder
   chunkCount?: Prisma.SortOrder
+  processedChunkCount?: Prisma.SortOrder
 }
 
 export type KnowledgeDocumentScalarRelationFilter = {
@@ -533,6 +583,8 @@ export type KnowledgeDocumentCreateWithoutCampaignsInput = {
   status?: $Enums.KnowledgeDocumentStatus
   processingError?: string | null
   chunkCount?: number
+  processedChunkCount?: number
+  processingStartedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   chunks?: Prisma.KnowledgeChunkCreateNestedManyWithoutDocumentInput
@@ -547,6 +599,8 @@ export type KnowledgeDocumentUncheckedCreateWithoutCampaignsInput = {
   status?: $Enums.KnowledgeDocumentStatus
   processingError?: string | null
   chunkCount?: number
+  processedChunkCount?: number
+  processingStartedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   chunks?: Prisma.KnowledgeChunkUncheckedCreateNestedManyWithoutDocumentInput
@@ -577,6 +631,8 @@ export type KnowledgeDocumentUpdateWithoutCampaignsInput = {
   status?: Prisma.EnumKnowledgeDocumentStatusFieldUpdateOperationsInput | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processedChunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processingStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chunks?: Prisma.KnowledgeChunkUpdateManyWithoutDocumentNestedInput
@@ -591,6 +647,8 @@ export type KnowledgeDocumentUncheckedUpdateWithoutCampaignsInput = {
   status?: Prisma.EnumKnowledgeDocumentStatusFieldUpdateOperationsInput | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processedChunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processingStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   chunks?: Prisma.KnowledgeChunkUncheckedUpdateManyWithoutDocumentNestedInput
@@ -605,6 +663,8 @@ export type KnowledgeDocumentCreateWithoutChunksInput = {
   status?: $Enums.KnowledgeDocumentStatus
   processingError?: string | null
   chunkCount?: number
+  processedChunkCount?: number
+  processingStartedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   campaigns?: Prisma.CampaignKnowledgeCreateNestedManyWithoutDocumentInput
@@ -619,6 +679,8 @@ export type KnowledgeDocumentUncheckedCreateWithoutChunksInput = {
   status?: $Enums.KnowledgeDocumentStatus
   processingError?: string | null
   chunkCount?: number
+  processedChunkCount?: number
+  processingStartedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   campaigns?: Prisma.CampaignKnowledgeUncheckedCreateNestedManyWithoutDocumentInput
@@ -649,6 +711,8 @@ export type KnowledgeDocumentUpdateWithoutChunksInput = {
   status?: Prisma.EnumKnowledgeDocumentStatusFieldUpdateOperationsInput | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processedChunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processingStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaigns?: Prisma.CampaignKnowledgeUpdateManyWithoutDocumentNestedInput
@@ -663,6 +727,8 @@ export type KnowledgeDocumentUncheckedUpdateWithoutChunksInput = {
   status?: Prisma.EnumKnowledgeDocumentStatusFieldUpdateOperationsInput | $Enums.KnowledgeDocumentStatus
   processingError?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   chunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processedChunkCount?: Prisma.IntFieldUpdateOperationsInput | number
+  processingStartedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaigns?: Prisma.CampaignKnowledgeUncheckedUpdateManyWithoutDocumentNestedInput
@@ -717,6 +783,8 @@ export type KnowledgeDocumentSelect<ExtArgs extends runtime.Types.Extensions.Int
   status?: boolean
   processingError?: boolean
   chunkCount?: boolean
+  processedChunkCount?: boolean
+  processingStartedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   campaigns?: boolean | Prisma.KnowledgeDocument$campaignsArgs<ExtArgs>
@@ -733,6 +801,8 @@ export type KnowledgeDocumentSelectCreateManyAndReturn<ExtArgs extends runtime.T
   status?: boolean
   processingError?: boolean
   chunkCount?: boolean
+  processedChunkCount?: boolean
+  processingStartedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["knowledgeDocument"]>
@@ -746,6 +816,8 @@ export type KnowledgeDocumentSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   status?: boolean
   processingError?: boolean
   chunkCount?: boolean
+  processedChunkCount?: boolean
+  processingStartedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["knowledgeDocument"]>
@@ -759,11 +831,13 @@ export type KnowledgeDocumentSelectScalar = {
   status?: boolean
   processingError?: boolean
   chunkCount?: boolean
+  processedChunkCount?: boolean
+  processingStartedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type KnowledgeDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "filename" | "contentType" | "fileSize" | "blobUrl" | "status" | "processingError" | "chunkCount" | "createdAt" | "updatedAt", ExtArgs["result"]["knowledgeDocument"]>
+export type KnowledgeDocumentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "filename" | "contentType" | "fileSize" | "blobUrl" | "status" | "processingError" | "chunkCount" | "processedChunkCount" | "processingStartedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["knowledgeDocument"]>
 export type KnowledgeDocumentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaigns?: boolean | Prisma.KnowledgeDocument$campaignsArgs<ExtArgs>
   chunks?: boolean | Prisma.KnowledgeDocument$chunksArgs<ExtArgs>
@@ -787,6 +861,8 @@ export type $KnowledgeDocumentPayload<ExtArgs extends runtime.Types.Extensions.I
     status: $Enums.KnowledgeDocumentStatus
     processingError: string | null
     chunkCount: number
+    processedChunkCount: number
+    processingStartedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["knowledgeDocument"]>
@@ -1222,6 +1298,8 @@ export interface KnowledgeDocumentFieldRefs {
   readonly status: Prisma.FieldRef<"KnowledgeDocument", 'KnowledgeDocumentStatus'>
   readonly processingError: Prisma.FieldRef<"KnowledgeDocument", 'String'>
   readonly chunkCount: Prisma.FieldRef<"KnowledgeDocument", 'Int'>
+  readonly processedChunkCount: Prisma.FieldRef<"KnowledgeDocument", 'Int'>
+  readonly processingStartedAt: Prisma.FieldRef<"KnowledgeDocument", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"KnowledgeDocument", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"KnowledgeDocument", 'DateTime'>
 }
