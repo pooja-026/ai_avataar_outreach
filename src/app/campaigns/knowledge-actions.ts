@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { getDb } from "@/lib/db";
 import { claimCampaignKnowledge, processKnowledgeDocuments } from "@/lib/knowledge-processing";
+import { requireAdmin } from "@/lib/auth-guard";
 
 const MAX_BATCH_SIZE = 4 * 1024 * 1024;
 const ACCEPTED_TYPES = new Set([
@@ -21,6 +22,7 @@ function refreshCampaign(campaignId: string) {
 }
 
 export async function uploadKnowledgeDocument(campaignId: string, formData: FormData) {
+  await requireAdmin();
   const files = formData.getAll("file");
   if (!files.length || files.some((file) => !(file instanceof File) || !file.name || file.size === 0 || !ACCEPTED_TYPES.has(file.type)) || files.reduce((total, file) => total + (file instanceof File ? file.size : 0), 0) > MAX_BATCH_SIZE) {
     redirect(`/campaigns/${campaignId}?knowledgeError=file`);
@@ -55,6 +57,7 @@ export async function uploadKnowledgeDocument(campaignId: string, formData: Form
 }
 
 export async function deleteKnowledgeDocument(campaignId: string, formData: FormData) {
+  await requireAdmin();
   const documentId = String(formData.get("documentId") ?? "");
   if (!documentId) redirect(`/campaigns/${campaignId}`);
   const assignment = await getDb().campaignKnowledge.findFirst({ where: { campaignId, documentId }, include: { document: true } });
@@ -71,6 +74,7 @@ export async function deleteKnowledgeDocument(campaignId: string, formData: Form
 }
 
 export async function prepareCampaignKnowledge(campaignId: string) {
+  await requireAdmin();
   if (!process.env.OPENAI_API_KEY) redirect(`/campaigns/${campaignId}?knowledgeError=processing`);
   let documentIds: string[];
   try {

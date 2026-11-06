@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { getDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth-guard";
 
 export const dynamic = "force-dynamic";
 
 export default async function CampaignsPage() {
+  await requireAdmin();
   const campaigns = await getDb().campaign.findMany({ orderBy: { updatedAt: "desc" } });
   return (
     <main className="min-h-screen bg-[#f6f8fb] px-5 py-8 text-slate-950 sm:px-8 lg:px-12">

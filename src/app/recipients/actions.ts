@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth-guard";
 
 function recipientValues(formData: FormData) {
   const firstName = String(formData.get("firstName") ?? "").trim();
@@ -15,6 +16,7 @@ function recipientValues(formData: FormData) {
 }
 
 export async function createRecipient(formData: FormData) {
+  await requireAdmin();
   const values = recipientValues(formData);
   if ("error" in values) redirect(`/recipients/new?error=${values.error}`);
   if (await getDb().recipient.findUnique({ where: { email: values.email } })) redirect("/recipients/new?error=duplicate");
@@ -24,6 +26,7 @@ export async function createRecipient(formData: FormData) {
 }
 
 export async function updateRecipient(id: string, formData: FormData) {
+  await requireAdmin();
   const values = recipientValues(formData);
   if ("error" in values) redirect(`/recipients/${id}?error=${values.error}`);
   const existing = await getDb().recipient.findUnique({ where: { email: values.email } });
@@ -35,6 +38,7 @@ export async function updateRecipient(id: string, formData: FormData) {
 }
 
 export async function assignRecipient(campaignId: string, formData: FormData) {
+  await requireAdmin();
   const recipientId = String(formData.get("recipientId") ?? "");
   const notes = String(formData.get("notes") ?? "").trim();
   if (!recipientId) redirect(`/campaigns/${campaignId}?recipientError=missing`);
@@ -44,6 +48,7 @@ export async function assignRecipient(campaignId: string, formData: FormData) {
 }
 
 export async function removeRecipient(campaignId: string, campaignRecipientId: string) {
+  await requireAdmin();
   await getDb().campaignRecipient.delete({ where: { id: campaignRecipientId } });
   revalidatePath(`/campaigns/${campaignId}`);
 }

@@ -8,6 +8,7 @@ import { updateCampaign } from "../actions";
 import { sendCampaignEmail } from "../email-actions";
 import { KnowledgeBasePanel } from "../knowledge-base-panel";
 import { deleteKnowledgeDocument, prepareCampaignKnowledge, uploadKnowledgeDocument } from "../knowledge-actions";
+import { requireAdmin } from "@/lib/auth-guard";
 
 export const dynamic = "force-dynamic";
 // Server actions on this page (including background knowledge preparation via after()) may run this long.
@@ -19,6 +20,7 @@ type SearchParams = {
 };
 
 export default async function CampaignDetailPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<SearchParams> }) {
+  await requireAdmin();
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const db = getDb();
   const now = new Date();
