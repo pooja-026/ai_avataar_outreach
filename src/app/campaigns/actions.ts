@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth-guard";
 
 function campaignValues(formData: FormData) {
   const name = String(formData.get("name") ?? "").trim();
@@ -17,6 +18,7 @@ function campaignValues(formData: FormData) {
 }
 
 export async function createCampaign(formData: FormData) {
+  await requireAdmin();
   const values = campaignValues(formData);
   if ("error" in values) redirect(`/campaigns/new?error=${values.error}`);
 
@@ -27,6 +29,7 @@ export async function createCampaign(formData: FormData) {
 }
 
 export async function updateCampaign(id: string, formData: FormData) {
+  await requireAdmin();
   const values = campaignValues(formData);
   if ("error" in values) redirect(`/campaigns/${id}?error=${values.error}`);
 

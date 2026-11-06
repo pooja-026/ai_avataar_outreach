@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { CampaignForm } from "../campaign-form";
 import { createCampaign } from "../actions";
+import { requireAdmin } from "@/lib/auth-guard";
 
 export default async function NewCampaignPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+  await requireAdmin();
   const { error } = await searchParams;
   return (
     <main className="min-h-screen bg-[#f6f8fb] px-5 py-8 text-slate-950 sm:px-8 lg:px-12">

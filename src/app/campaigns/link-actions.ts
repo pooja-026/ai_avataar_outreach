@@ -4,10 +4,12 @@ import { randomBytes } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth-guard";
 
 const INVITATION_LIFETIME_MS = 24 * 60 * 60 * 1000;
 
 export async function createRecipientLink(campaignId: string, campaignRecipientId: string) {
+  await requireAdmin();
   const db = getDb();
   const assignment = await db.campaignRecipient.findFirst({ where: { id: campaignRecipientId, campaignId } });
   if (!assignment) redirect(`/campaigns/${campaignId}`);
@@ -27,6 +29,7 @@ export async function createRecipientLink(campaignId: string, campaignRecipientI
 }
 
 export async function revokeRecipientLink(campaignId: string, linkId: string) {
+  await requireAdmin();
   const link = await getDb().recipientLink.findFirst({ where: { id: linkId, campaignRecipient: { campaignId } } });
   if (!link) redirect(`/campaigns/${campaignId}`);
   await getDb().recipientLink.update({ where: { id: linkId }, data: { status: "REVOKED", revokedAt: new Date() } });

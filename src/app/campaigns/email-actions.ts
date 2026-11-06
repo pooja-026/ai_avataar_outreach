@@ -4,12 +4,14 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import nodemailer from "nodemailer";
 import { getDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth-guard";
 
 function escapeHtml(value: string) {
   return value.replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[character] ?? character);
 }
 
 export async function sendCampaignEmail(campaignId: string, campaignRecipientId: string) {
+  await requireAdmin();
   const gmailUser = process.env.GMAIL_USER;
   const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
   const from = process.env.EMAIL_FROM || (gmailUser ? `Avataar Outreach <${gmailUser}>` : undefined);

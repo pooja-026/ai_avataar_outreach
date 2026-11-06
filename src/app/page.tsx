@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getDb } from "@/lib/db";
+import { requireAdmin } from "@/lib/auth-guard";
+import { AccountMenu } from "./account-menu";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +25,8 @@ function ChevronIcon() {
 }
 
 export default async function Home() {
+  const admin = await requireAdmin();
+  const firstName = admin.name.split(" ")[0];
   const [campaignCount, recipientCount, avatarSessionCount, avatarProfileCount] = await Promise.all([
     getDb().campaign.count(),
     getDb().recipient.count(),
@@ -60,8 +64,8 @@ export default async function Home() {
         <section className="min-w-0 flex-1 px-5 py-5 sm:px-8 sm:py-8 lg:px-12">
           <header className="flex items-center justify-between gap-4 border-b border-slate-200 pb-6">
             <div className="flex items-center gap-3 lg:hidden"><div className="grid size-9 place-items-center rounded-lg bg-slate-950 text-sm font-bold text-white">A</div><span className="text-sm font-semibold">Avataar</span></div>
-            <div className="hidden lg:block"><p className="text-sm text-slate-500">Your outreach workspace</p><p className="mt-1 text-sm font-medium text-slate-700">Good afternoon, Admin</p></div>
-            <div className="ml-auto flex items-center gap-3"><button className="hidden rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm sm:block" type="button">Help center</button><div className="grid size-10 place-items-center rounded-full bg-gradient-to-br from-cyan-200 to-indigo-300 text-xs font-bold text-slate-800">AD</div></div>
+            <div className="hidden lg:block"><p className="text-sm text-slate-500">Your outreach workspace</p><p className="mt-1 text-sm font-medium text-slate-700">Welcome back, {firstName}</p></div>
+            <div className="ml-auto"><AccountMenu /></div>
           </header>
 
           <div className="mx-auto max-w-6xl py-10">

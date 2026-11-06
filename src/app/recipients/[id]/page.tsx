@@ -5,6 +5,7 @@ import { getDb } from "@/lib/db";
 export const dynamic = "force-dynamic";
 import { updateRecipient } from "../actions";
 import { RecipientForm } from "../recipient-form";
+import { requireAdmin } from "@/lib/auth-guard";
 
 type Insights = {
   interestLevel: string;
@@ -28,6 +29,7 @@ function parseInsights(value: unknown): Insights | null {
 }
 
 export default async function RecipientPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ created?: string; saved?: string; error?: string }> }) {
+  await requireAdmin();
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const recipient = await getDb().recipient.findUnique({
     where: { id },
