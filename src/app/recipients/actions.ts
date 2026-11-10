@@ -49,6 +49,7 @@ export async function assignRecipient(campaignId: string, formData: FormData) {
 
 export async function removeRecipient(campaignId: string, campaignRecipientId: string) {
   await requireAdmin();
-  await getDb().campaignRecipient.delete({ where: { id: campaignRecipientId } });
+  // Scoped to the campaign so an ID from another campaign cannot be removed through this page.
+  await getDb().campaignRecipient.deleteMany({ where: { id: campaignRecipientId, campaignId } });
   revalidatePath(`/campaigns/${campaignId}`);
 }
