@@ -73,7 +73,9 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
         body: JSON.stringify({ messages: messages.map((message) => ({ role: message.role, content: message.content })) }),
         signal: controller.signal,
       });
-      if (!response.ok || !response.body) throw new Error("Unable to generate a grounded response.");
+      // 429 "burst": a reply was requested too quickly, skip it. 429 "exhausted": the body is a goodbye to speak.
+      if (response.status === 429 && response.headers.get("X-Limit") === "burst") return;
+      if ((!response.ok && response.status !== 429) || !response.body) throw new Error("Unable to generate a grounded response.");
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
@@ -135,6 +137,11 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
       audioRef.current = audio;
       const response = await fetch(`/api/recipient-links/${encodeURIComponent(token)}/avatar-session`, { method: "POST" });
       const body: unknown = await response.json();
+      if (response.status === 429 && body && typeof body === "object" && "error" in body && typeof body.error === "string") {
+        const limitReached = new Error(body.error);
+        limitReached.name = "LimitReached";
+        throw limitReached;
+      }
       if (!response.ok || !body || typeof body !== "object" || !("sessionToken" in body) || typeof body.sessionToken !== "string") throw new Error("Unable to create your private avatar session.");
       if (!("sessionId" in body) || typeof body.sessionId !== "string") throw new Error("Unable to create your private avatar session.");
       sessionIdRef.current = body.sessionId;
@@ -162,7 +169,7 @@ export function RecipientExperience({ firstName, campaignName, message, token }:
       setState("live");
     } catch (cause) {
       audioRef.current?.getTracks().forEach((track) => track.stop()); audioRef.current = null;
-      setError(cause instanceof Error && cause.name === "NotAllowedError" ? "Microphone access is needed to speak with the avatar. Please allow it and try again." : "We could not connect the avatar right now. Please try again.");
+      setError(cause instanceof Error && cause.name === "LimitReached" ? cause.message : cause instanceof Error && cause.name === "NotAllowedError" ? "Microphone access is needed to speak with the avatar. Please allow it and try again." : "We could not connect the avatar right now. Please try again.");
       setState("error");
     }
   }

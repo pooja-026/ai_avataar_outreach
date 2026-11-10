@@ -20,8 +20,18 @@ export type RecipientLinkModel = runtime.Types.Result.DefaultSelection<Prisma.$R
 
 export type AggregateRecipientLink = {
   _count: RecipientLinkCountAggregateOutputType | null
+  _avg: RecipientLinkAvgAggregateOutputType | null
+  _sum: RecipientLinkSumAggregateOutputType | null
   _min: RecipientLinkMinAggregateOutputType | null
   _max: RecipientLinkMaxAggregateOutputType | null
+}
+
+export type RecipientLinkAvgAggregateOutputType = {
+  sessionCount: number | null
+}
+
+export type RecipientLinkSumAggregateOutputType = {
+  sessionCount: number | null
 }
 
 export type RecipientLinkMinAggregateOutputType = {
@@ -32,6 +42,7 @@ export type RecipientLinkMinAggregateOutputType = {
   expiresAt: Date | null
   lastOpenedAt: Date | null
   revokedAt: Date | null
+  sessionCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +55,7 @@ export type RecipientLinkMaxAggregateOutputType = {
   expiresAt: Date | null
   lastOpenedAt: Date | null
   revokedAt: Date | null
+  sessionCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,11 +68,20 @@ export type RecipientLinkCountAggregateOutputType = {
   expiresAt: number
   lastOpenedAt: number
   revokedAt: number
+  sessionCount: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type RecipientLinkAvgAggregateInputType = {
+  sessionCount?: true
+}
+
+export type RecipientLinkSumAggregateInputType = {
+  sessionCount?: true
+}
 
 export type RecipientLinkMinAggregateInputType = {
   id?: true
@@ -70,6 +91,7 @@ export type RecipientLinkMinAggregateInputType = {
   expiresAt?: true
   lastOpenedAt?: true
   revokedAt?: true
+  sessionCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +104,7 @@ export type RecipientLinkMaxAggregateInputType = {
   expiresAt?: true
   lastOpenedAt?: true
   revokedAt?: true
+  sessionCount?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +117,7 @@ export type RecipientLinkCountAggregateInputType = {
   expiresAt?: true
   lastOpenedAt?: true
   revokedAt?: true
+  sessionCount?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -137,6 +161,18 @@ export type RecipientLinkAggregateArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: RecipientLinkAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: RecipientLinkSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: RecipientLinkMinAggregateInputType
@@ -167,6 +203,8 @@ export type RecipientLinkGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   _count?: RecipientLinkCountAggregateInputType | true
+  _avg?: RecipientLinkAvgAggregateInputType
+  _sum?: RecipientLinkSumAggregateInputType
   _min?: RecipientLinkMinAggregateInputType
   _max?: RecipientLinkMaxAggregateInputType
 }
@@ -179,9 +217,12 @@ export type RecipientLinkGroupByOutputType = {
   expiresAt: Date | null
   lastOpenedAt: Date | null
   revokedAt: Date | null
+  sessionCount: number
   createdAt: Date
   updatedAt: Date
   _count: RecipientLinkCountAggregateOutputType | null
+  _avg: RecipientLinkAvgAggregateOutputType | null
+  _sum: RecipientLinkSumAggregateOutputType | null
   _min: RecipientLinkMinAggregateOutputType | null
   _max: RecipientLinkMaxAggregateOutputType | null
 }
@@ -212,6 +253,7 @@ export type RecipientLinkWhereInput = {
   expiresAt?: Prisma.DateTimeNullableFilter<"RecipientLink"> | Date | string | null
   lastOpenedAt?: Prisma.DateTimeNullableFilter<"RecipientLink"> | Date | string | null
   revokedAt?: Prisma.DateTimeNullableFilter<"RecipientLink"> | Date | string | null
+  sessionCount?: Prisma.IntFilter<"RecipientLink"> | number
   createdAt?: Prisma.DateTimeFilter<"RecipientLink"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"RecipientLink"> | Date | string
   campaignRecipient?: Prisma.XOR<Prisma.CampaignRecipientScalarRelationFilter, Prisma.CampaignRecipientWhereInput>
@@ -227,6 +269,7 @@ export type RecipientLinkOrderByWithRelationInput = {
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastOpenedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  sessionCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   campaignRecipient?: Prisma.CampaignRecipientOrderByWithRelationInput
@@ -245,6 +288,7 @@ export type RecipientLinkWhereUniqueInput = Prisma.AtLeast<{
   expiresAt?: Prisma.DateTimeNullableFilter<"RecipientLink"> | Date | string | null
   lastOpenedAt?: Prisma.DateTimeNullableFilter<"RecipientLink"> | Date | string | null
   revokedAt?: Prisma.DateTimeNullableFilter<"RecipientLink"> | Date | string | null
+  sessionCount?: Prisma.IntFilter<"RecipientLink"> | number
   createdAt?: Prisma.DateTimeFilter<"RecipientLink"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"RecipientLink"> | Date | string
   campaignRecipient?: Prisma.XOR<Prisma.CampaignRecipientScalarRelationFilter, Prisma.CampaignRecipientWhereInput>
@@ -260,11 +304,14 @@ export type RecipientLinkOrderByWithAggregationInput = {
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   lastOpenedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   revokedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  sessionCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.RecipientLinkCountOrderByAggregateInput
+  _avg?: Prisma.RecipientLinkAvgOrderByAggregateInput
   _max?: Prisma.RecipientLinkMaxOrderByAggregateInput
   _min?: Prisma.RecipientLinkMinOrderByAggregateInput
+  _sum?: Prisma.RecipientLinkSumOrderByAggregateInput
 }
 
 export type RecipientLinkScalarWhereWithAggregatesInput = {
@@ -278,6 +325,7 @@ export type RecipientLinkScalarWhereWithAggregatesInput = {
   expiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RecipientLink"> | Date | string | null
   lastOpenedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RecipientLink"> | Date | string | null
   revokedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"RecipientLink"> | Date | string | null
+  sessionCount?: Prisma.IntWithAggregatesFilter<"RecipientLink"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"RecipientLink"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"RecipientLink"> | Date | string
 }
@@ -289,6 +337,7 @@ export type RecipientLinkCreateInput = {
   expiresAt?: Date | string | null
   lastOpenedAt?: Date | string | null
   revokedAt?: Date | string | null
+  sessionCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   campaignRecipient: Prisma.CampaignRecipientCreateNestedOneWithoutLinksInput
@@ -304,6 +353,7 @@ export type RecipientLinkUncheckedCreateInput = {
   expiresAt?: Date | string | null
   lastOpenedAt?: Date | string | null
   revokedAt?: Date | string | null
+  sessionCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutRecipientLinkInput
@@ -317,6 +367,7 @@ export type RecipientLinkUpdateInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaignRecipient?: Prisma.CampaignRecipientUpdateOneRequiredWithoutLinksNestedInput
@@ -332,6 +383,7 @@ export type RecipientLinkUncheckedUpdateInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutRecipientLinkNestedInput
@@ -346,6 +398,7 @@ export type RecipientLinkCreateManyInput = {
   expiresAt?: Date | string | null
   lastOpenedAt?: Date | string | null
   revokedAt?: Date | string | null
+  sessionCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -357,6 +410,7 @@ export type RecipientLinkUpdateManyMutationInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -369,6 +423,7 @@ export type RecipientLinkUncheckedUpdateManyInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -396,8 +451,13 @@ export type RecipientLinkCountOrderByAggregateInput = {
   expiresAt?: Prisma.SortOrder
   lastOpenedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrder
+  sessionCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type RecipientLinkAvgOrderByAggregateInput = {
+  sessionCount?: Prisma.SortOrder
 }
 
 export type RecipientLinkMaxOrderByAggregateInput = {
@@ -408,6 +468,7 @@ export type RecipientLinkMaxOrderByAggregateInput = {
   expiresAt?: Prisma.SortOrder
   lastOpenedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrder
+  sessionCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -420,8 +481,13 @@ export type RecipientLinkMinOrderByAggregateInput = {
   expiresAt?: Prisma.SortOrder
   lastOpenedAt?: Prisma.SortOrder
   revokedAt?: Prisma.SortOrder
+  sessionCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type RecipientLinkSumOrderByAggregateInput = {
+  sessionCount?: Prisma.SortOrder
 }
 
 export type RecipientLinkCreateNestedManyWithoutCampaignRecipientInput = {
@@ -486,6 +552,14 @@ export type EnumRecipientLinkStatusFieldUpdateOperationsInput = {
   set?: $Enums.RecipientLinkStatus
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type RecipientLinkCreateNestedOneWithoutSessionsInput = {
   create?: Prisma.XOR<Prisma.RecipientLinkCreateWithoutSessionsInput, Prisma.RecipientLinkUncheckedCreateWithoutSessionsInput>
   connectOrCreate?: Prisma.RecipientLinkCreateOrConnectWithoutSessionsInput
@@ -509,6 +583,7 @@ export type RecipientLinkCreateWithoutCampaignRecipientInput = {
   expiresAt?: Date | string | null
   lastOpenedAt?: Date | string | null
   revokedAt?: Date | string | null
+  sessionCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AvatarSessionCreateNestedManyWithoutRecipientLinkInput
@@ -522,6 +597,7 @@ export type RecipientLinkUncheckedCreateWithoutCampaignRecipientInput = {
   expiresAt?: Date | string | null
   lastOpenedAt?: Date | string | null
   revokedAt?: Date | string | null
+  sessionCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutRecipientLinkInput
@@ -565,6 +641,7 @@ export type RecipientLinkScalarWhereInput = {
   expiresAt?: Prisma.DateTimeNullableFilter<"RecipientLink"> | Date | string | null
   lastOpenedAt?: Prisma.DateTimeNullableFilter<"RecipientLink"> | Date | string | null
   revokedAt?: Prisma.DateTimeNullableFilter<"RecipientLink"> | Date | string | null
+  sessionCount?: Prisma.IntFilter<"RecipientLink"> | number
   createdAt?: Prisma.DateTimeFilter<"RecipientLink"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"RecipientLink"> | Date | string
 }
@@ -576,6 +653,7 @@ export type RecipientLinkCreateWithoutDeliveriesInput = {
   expiresAt?: Date | string | null
   lastOpenedAt?: Date | string | null
   revokedAt?: Date | string | null
+  sessionCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   campaignRecipient: Prisma.CampaignRecipientCreateNestedOneWithoutLinksInput
@@ -590,6 +668,7 @@ export type RecipientLinkUncheckedCreateWithoutDeliveriesInput = {
   expiresAt?: Date | string | null
   lastOpenedAt?: Date | string | null
   revokedAt?: Date | string | null
+  sessionCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.AvatarSessionUncheckedCreateNestedManyWithoutRecipientLinkInput
@@ -618,6 +697,7 @@ export type RecipientLinkUpdateWithoutDeliveriesInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaignRecipient?: Prisma.CampaignRecipientUpdateOneRequiredWithoutLinksNestedInput
@@ -632,6 +712,7 @@ export type RecipientLinkUncheckedUpdateWithoutDeliveriesInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutRecipientLinkNestedInput
@@ -644,6 +725,7 @@ export type RecipientLinkCreateWithoutSessionsInput = {
   expiresAt?: Date | string | null
   lastOpenedAt?: Date | string | null
   revokedAt?: Date | string | null
+  sessionCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   campaignRecipient: Prisma.CampaignRecipientCreateNestedOneWithoutLinksInput
@@ -658,6 +740,7 @@ export type RecipientLinkUncheckedCreateWithoutSessionsInput = {
   expiresAt?: Date | string | null
   lastOpenedAt?: Date | string | null
   revokedAt?: Date | string | null
+  sessionCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   deliveries?: Prisma.EmailDeliveryUncheckedCreateNestedManyWithoutRecipientLinkInput
@@ -686,6 +769,7 @@ export type RecipientLinkUpdateWithoutSessionsInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaignRecipient?: Prisma.CampaignRecipientUpdateOneRequiredWithoutLinksNestedInput
@@ -700,6 +784,7 @@ export type RecipientLinkUncheckedUpdateWithoutSessionsInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deliveries?: Prisma.EmailDeliveryUncheckedUpdateManyWithoutRecipientLinkNestedInput
@@ -712,6 +797,7 @@ export type RecipientLinkCreateManyCampaignRecipientInput = {
   expiresAt?: Date | string | null
   lastOpenedAt?: Date | string | null
   revokedAt?: Date | string | null
+  sessionCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -723,6 +809,7 @@ export type RecipientLinkUpdateWithoutCampaignRecipientInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AvatarSessionUpdateManyWithoutRecipientLinkNestedInput
@@ -736,6 +823,7 @@ export type RecipientLinkUncheckedUpdateWithoutCampaignRecipientInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.AvatarSessionUncheckedUpdateManyWithoutRecipientLinkNestedInput
@@ -749,6 +837,7 @@ export type RecipientLinkUncheckedUpdateManyWithoutCampaignRecipientInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   lastOpenedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   revokedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sessionCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -801,6 +890,7 @@ export type RecipientLinkSelect<ExtArgs extends runtime.Types.Extensions.Interna
   expiresAt?: boolean
   lastOpenedAt?: boolean
   revokedAt?: boolean
+  sessionCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   campaignRecipient?: boolean | Prisma.CampaignRecipientDefaultArgs<ExtArgs>
@@ -817,6 +907,7 @@ export type RecipientLinkSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   expiresAt?: boolean
   lastOpenedAt?: boolean
   revokedAt?: boolean
+  sessionCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   campaignRecipient?: boolean | Prisma.CampaignRecipientDefaultArgs<ExtArgs>
@@ -830,6 +921,7 @@ export type RecipientLinkSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   expiresAt?: boolean
   lastOpenedAt?: boolean
   revokedAt?: boolean
+  sessionCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   campaignRecipient?: boolean | Prisma.CampaignRecipientDefaultArgs<ExtArgs>
@@ -843,11 +935,12 @@ export type RecipientLinkSelectScalar = {
   expiresAt?: boolean
   lastOpenedAt?: boolean
   revokedAt?: boolean
+  sessionCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type RecipientLinkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignRecipientId" | "token" | "status" | "expiresAt" | "lastOpenedAt" | "revokedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["recipientLink"]>
+export type RecipientLinkOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignRecipientId" | "token" | "status" | "expiresAt" | "lastOpenedAt" | "revokedAt" | "sessionCount" | "createdAt" | "updatedAt", ExtArgs["result"]["recipientLink"]>
 export type RecipientLinkInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaignRecipient?: boolean | Prisma.CampaignRecipientDefaultArgs<ExtArgs>
   sessions?: boolean | Prisma.RecipientLink$sessionsArgs<ExtArgs>
@@ -876,6 +969,10 @@ export type $RecipientLinkPayload<ExtArgs extends runtime.Types.Extensions.Inter
     expiresAt: Date | null
     lastOpenedAt: Date | null
     revokedAt: Date | null
+    /**
+     * Avatar sessions started from this link; capped to limit Anam spend.
+     */
+    sessionCount: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["recipientLink"]>
@@ -1311,6 +1408,7 @@ export interface RecipientLinkFieldRefs {
   readonly expiresAt: Prisma.FieldRef<"RecipientLink", 'DateTime'>
   readonly lastOpenedAt: Prisma.FieldRef<"RecipientLink", 'DateTime'>
   readonly revokedAt: Prisma.FieldRef<"RecipientLink", 'DateTime'>
+  readonly sessionCount: Prisma.FieldRef<"RecipientLink", 'Int'>
   readonly createdAt: Prisma.FieldRef<"RecipientLink", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"RecipientLink", 'DateTime'>
 }

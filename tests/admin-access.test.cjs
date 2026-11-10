@@ -45,7 +45,7 @@ test('every exported server action checks the admin session first', () => {
     .filter((file) => /actions\.ts$/.test(file));
   assert.ok(actionFiles.length >= 5);
   for (const file of actionFiles) {
-    const source = fs.readFileSync(file, 'utf8');
+    const source = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
     const actions = [...source.matchAll(/export async function (\w+)\([^)]*\)[^{]*\{\n(.*)/g)];
     assert.ok(actions.length > 0, `${file} has actions`);
     for (const [, name, firstLine] of actions) {

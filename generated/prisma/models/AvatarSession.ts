@@ -20,8 +20,18 @@ export type AvatarSessionModel = runtime.Types.Result.DefaultSelection<Prisma.$A
 
 export type AggregateAvatarSession = {
   _count: AvatarSessionCountAggregateOutputType | null
+  _avg: AvatarSessionAvgAggregateOutputType | null
+  _sum: AvatarSessionSumAggregateOutputType | null
   _min: AvatarSessionMinAggregateOutputType | null
   _max: AvatarSessionMaxAggregateOutputType | null
+}
+
+export type AvatarSessionAvgAggregateOutputType = {
+  replyCount: number | null
+}
+
+export type AvatarSessionSumAggregateOutputType = {
+  replyCount: number | null
 }
 
 export type AvatarSessionMinAggregateOutputType = {
@@ -33,6 +43,8 @@ export type AvatarSessionMinAggregateOutputType = {
   status: $Enums.AvatarSessionStatus | null
   startedAt: Date | null
   endedAt: Date | null
+  replyCount: number | null
+  lastReplyAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,6 +58,8 @@ export type AvatarSessionMaxAggregateOutputType = {
   status: $Enums.AvatarSessionStatus | null
   startedAt: Date | null
   endedAt: Date | null
+  replyCount: number | null
+  lastReplyAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,11 +74,21 @@ export type AvatarSessionCountAggregateOutputType = {
   contextSnapshot: number
   startedAt: number
   endedAt: number
+  replyCount: number
+  lastReplyAt: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type AvatarSessionAvgAggregateInputType = {
+  replyCount?: true
+}
+
+export type AvatarSessionSumAggregateInputType = {
+  replyCount?: true
+}
 
 export type AvatarSessionMinAggregateInputType = {
   id?: true
@@ -75,6 +99,8 @@ export type AvatarSessionMinAggregateInputType = {
   status?: true
   startedAt?: true
   endedAt?: true
+  replyCount?: true
+  lastReplyAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +114,8 @@ export type AvatarSessionMaxAggregateInputType = {
   status?: true
   startedAt?: true
   endedAt?: true
+  replyCount?: true
+  lastReplyAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -102,6 +130,8 @@ export type AvatarSessionCountAggregateInputType = {
   contextSnapshot?: true
   startedAt?: true
   endedAt?: true
+  replyCount?: true
+  lastReplyAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -145,6 +175,18 @@ export type AvatarSessionAggregateArgs<ExtArgs extends runtime.Types.Extensions.
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: AvatarSessionAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: AvatarSessionSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: AvatarSessionMinAggregateInputType
@@ -175,6 +217,8 @@ export type AvatarSessionGroupByArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   _count?: AvatarSessionCountAggregateInputType | true
+  _avg?: AvatarSessionAvgAggregateInputType
+  _sum?: AvatarSessionSumAggregateInputType
   _min?: AvatarSessionMinAggregateInputType
   _max?: AvatarSessionMaxAggregateInputType
 }
@@ -189,9 +233,13 @@ export type AvatarSessionGroupByOutputType = {
   contextSnapshot: runtime.JsonValue | null
   startedAt: Date | null
   endedAt: Date | null
+  replyCount: number
+  lastReplyAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: AvatarSessionCountAggregateOutputType | null
+  _avg: AvatarSessionAvgAggregateOutputType | null
+  _sum: AvatarSessionSumAggregateOutputType | null
   _min: AvatarSessionMinAggregateOutputType | null
   _max: AvatarSessionMaxAggregateOutputType | null
 }
@@ -224,6 +272,8 @@ export type AvatarSessionWhereInput = {
   contextSnapshot?: Prisma.JsonNullableFilter<"AvatarSession">
   startedAt?: Prisma.DateTimeNullableFilter<"AvatarSession"> | Date | string | null
   endedAt?: Prisma.DateTimeNullableFilter<"AvatarSession"> | Date | string | null
+  replyCount?: Prisma.IntFilter<"AvatarSession"> | number
+  lastReplyAt?: Prisma.DateTimeNullableFilter<"AvatarSession"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"AvatarSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AvatarSession"> | Date | string
   campaignRecipient?: Prisma.XOR<Prisma.CampaignRecipientScalarRelationFilter, Prisma.CampaignRecipientWhereInput>
@@ -242,6 +292,8 @@ export type AvatarSessionOrderByWithRelationInput = {
   contextSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   endedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  replyCount?: Prisma.SortOrder
+  lastReplyAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   campaignRecipient?: Prisma.CampaignRecipientOrderByWithRelationInput
@@ -263,6 +315,8 @@ export type AvatarSessionWhereUniqueInput = Prisma.AtLeast<{
   contextSnapshot?: Prisma.JsonNullableFilter<"AvatarSession">
   startedAt?: Prisma.DateTimeNullableFilter<"AvatarSession"> | Date | string | null
   endedAt?: Prisma.DateTimeNullableFilter<"AvatarSession"> | Date | string | null
+  replyCount?: Prisma.IntFilter<"AvatarSession"> | number
+  lastReplyAt?: Prisma.DateTimeNullableFilter<"AvatarSession"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"AvatarSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AvatarSession"> | Date | string
   campaignRecipient?: Prisma.XOR<Prisma.CampaignRecipientScalarRelationFilter, Prisma.CampaignRecipientWhereInput>
@@ -281,11 +335,15 @@ export type AvatarSessionOrderByWithAggregationInput = {
   contextSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
   startedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   endedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  replyCount?: Prisma.SortOrder
+  lastReplyAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AvatarSessionCountOrderByAggregateInput
+  _avg?: Prisma.AvatarSessionAvgOrderByAggregateInput
   _max?: Prisma.AvatarSessionMaxOrderByAggregateInput
   _min?: Prisma.AvatarSessionMinOrderByAggregateInput
+  _sum?: Prisma.AvatarSessionSumOrderByAggregateInput
 }
 
 export type AvatarSessionScalarWhereWithAggregatesInput = {
@@ -301,6 +359,8 @@ export type AvatarSessionScalarWhereWithAggregatesInput = {
   contextSnapshot?: Prisma.JsonNullableWithAggregatesFilter<"AvatarSession">
   startedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AvatarSession"> | Date | string | null
   endedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AvatarSession"> | Date | string | null
+  replyCount?: Prisma.IntWithAggregatesFilter<"AvatarSession"> | number
+  lastReplyAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AvatarSession"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AvatarSession"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"AvatarSession"> | Date | string
 }
@@ -312,6 +372,8 @@ export type AvatarSessionCreateInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   campaignRecipient: Prisma.CampaignRecipientCreateNestedOneWithoutSessionsInput
@@ -330,6 +392,8 @@ export type AvatarSessionUncheckedCreateInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   messages?: Prisma.ConversationMessageUncheckedCreateNestedManyWithoutSessionInput
@@ -342,6 +406,8 @@ export type AvatarSessionUpdateInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaignRecipient?: Prisma.CampaignRecipientUpdateOneRequiredWithoutSessionsNestedInput
@@ -360,6 +426,8 @@ export type AvatarSessionUncheckedUpdateInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.ConversationMessageUncheckedUpdateManyWithoutSessionNestedInput
@@ -375,6 +443,8 @@ export type AvatarSessionCreateManyInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -386,6 +456,8 @@ export type AvatarSessionUpdateManyMutationInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -400,6 +472,8 @@ export type AvatarSessionUncheckedUpdateManyInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -424,8 +498,14 @@ export type AvatarSessionCountOrderByAggregateInput = {
   contextSnapshot?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   endedAt?: Prisma.SortOrder
+  replyCount?: Prisma.SortOrder
+  lastReplyAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type AvatarSessionAvgOrderByAggregateInput = {
+  replyCount?: Prisma.SortOrder
 }
 
 export type AvatarSessionMaxOrderByAggregateInput = {
@@ -437,6 +517,8 @@ export type AvatarSessionMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   endedAt?: Prisma.SortOrder
+  replyCount?: Prisma.SortOrder
+  lastReplyAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -450,8 +532,14 @@ export type AvatarSessionMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   startedAt?: Prisma.SortOrder
   endedAt?: Prisma.SortOrder
+  replyCount?: Prisma.SortOrder
+  lastReplyAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type AvatarSessionSumOrderByAggregateInput = {
+  replyCount?: Prisma.SortOrder
 }
 
 export type AvatarSessionScalarRelationFilter = {
@@ -610,6 +698,8 @@ export type AvatarSessionCreateWithoutAvatarConfigurationInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   campaignRecipient: Prisma.CampaignRecipientCreateNestedOneWithoutSessionsInput
@@ -626,6 +716,8 @@ export type AvatarSessionUncheckedCreateWithoutAvatarConfigurationInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   messages?: Prisma.ConversationMessageUncheckedCreateNestedManyWithoutSessionInput
@@ -670,6 +762,8 @@ export type AvatarSessionScalarWhereInput = {
   contextSnapshot?: Prisma.JsonNullableFilter<"AvatarSession">
   startedAt?: Prisma.DateTimeNullableFilter<"AvatarSession"> | Date | string | null
   endedAt?: Prisma.DateTimeNullableFilter<"AvatarSession"> | Date | string | null
+  replyCount?: Prisma.IntFilter<"AvatarSession"> | number
+  lastReplyAt?: Prisma.DateTimeNullableFilter<"AvatarSession"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"AvatarSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"AvatarSession"> | Date | string
 }
@@ -681,6 +775,8 @@ export type AvatarSessionCreateWithoutCampaignRecipientInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   recipientLink?: Prisma.RecipientLinkCreateNestedOneWithoutSessionsInput
@@ -697,6 +793,8 @@ export type AvatarSessionUncheckedCreateWithoutCampaignRecipientInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   messages?: Prisma.ConversationMessageUncheckedCreateNestedManyWithoutSessionInput
@@ -735,6 +833,8 @@ export type AvatarSessionCreateWithoutRecipientLinkInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   campaignRecipient: Prisma.CampaignRecipientCreateNestedOneWithoutSessionsInput
@@ -751,6 +851,8 @@ export type AvatarSessionUncheckedCreateWithoutRecipientLinkInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   messages?: Prisma.ConversationMessageUncheckedCreateNestedManyWithoutSessionInput
@@ -789,6 +891,8 @@ export type AvatarSessionCreateWithoutMessagesInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   campaignRecipient: Prisma.CampaignRecipientCreateNestedOneWithoutSessionsInput
@@ -806,6 +910,8 @@ export type AvatarSessionUncheckedCreateWithoutMessagesInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -833,6 +939,8 @@ export type AvatarSessionUpdateWithoutMessagesInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaignRecipient?: Prisma.CampaignRecipientUpdateOneRequiredWithoutSessionsNestedInput
@@ -850,6 +958,8 @@ export type AvatarSessionUncheckedUpdateWithoutMessagesInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -863,6 +973,8 @@ export type AvatarSessionCreateManyAvatarConfigurationInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -874,6 +986,8 @@ export type AvatarSessionUpdateWithoutAvatarConfigurationInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaignRecipient?: Prisma.CampaignRecipientUpdateOneRequiredWithoutSessionsNestedInput
@@ -890,6 +1004,8 @@ export type AvatarSessionUncheckedUpdateWithoutAvatarConfigurationInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.ConversationMessageUncheckedUpdateManyWithoutSessionNestedInput
@@ -904,6 +1020,8 @@ export type AvatarSessionUncheckedUpdateManyWithoutAvatarConfigurationInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -917,6 +1035,8 @@ export type AvatarSessionCreateManyCampaignRecipientInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -928,6 +1048,8 @@ export type AvatarSessionUpdateWithoutCampaignRecipientInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   recipientLink?: Prisma.RecipientLinkUpdateOneWithoutSessionsNestedInput
@@ -944,6 +1066,8 @@ export type AvatarSessionUncheckedUpdateWithoutCampaignRecipientInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.ConversationMessageUncheckedUpdateManyWithoutSessionNestedInput
@@ -958,6 +1082,8 @@ export type AvatarSessionUncheckedUpdateManyWithoutCampaignRecipientInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -971,6 +1097,8 @@ export type AvatarSessionCreateManyRecipientLinkInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Date | string | null
   endedAt?: Date | string | null
+  replyCount?: number
+  lastReplyAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -982,6 +1110,8 @@ export type AvatarSessionUpdateWithoutRecipientLinkInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaignRecipient?: Prisma.CampaignRecipientUpdateOneRequiredWithoutSessionsNestedInput
@@ -998,6 +1128,8 @@ export type AvatarSessionUncheckedUpdateWithoutRecipientLinkInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.ConversationMessageUncheckedUpdateManyWithoutSessionNestedInput
@@ -1012,6 +1144,8 @@ export type AvatarSessionUncheckedUpdateManyWithoutRecipientLinkInput = {
   contextSnapshot?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  replyCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastReplyAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1057,6 +1191,8 @@ export type AvatarSessionSelect<ExtArgs extends runtime.Types.Extensions.Interna
   contextSnapshot?: boolean
   startedAt?: boolean
   endedAt?: boolean
+  replyCount?: boolean
+  lastReplyAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   campaignRecipient?: boolean | Prisma.CampaignRecipientDefaultArgs<ExtArgs>
@@ -1076,6 +1212,8 @@ export type AvatarSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   contextSnapshot?: boolean
   startedAt?: boolean
   endedAt?: boolean
+  replyCount?: boolean
+  lastReplyAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   campaignRecipient?: boolean | Prisma.CampaignRecipientDefaultArgs<ExtArgs>
@@ -1093,6 +1231,8 @@ export type AvatarSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   contextSnapshot?: boolean
   startedAt?: boolean
   endedAt?: boolean
+  replyCount?: boolean
+  lastReplyAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   campaignRecipient?: boolean | Prisma.CampaignRecipientDefaultArgs<ExtArgs>
@@ -1110,11 +1250,13 @@ export type AvatarSessionSelectScalar = {
   contextSnapshot?: boolean
   startedAt?: boolean
   endedAt?: boolean
+  replyCount?: boolean
+  lastReplyAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AvatarSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignRecipientId" | "recipientLinkId" | "avatarConfigurationId" | "providerSessionId" | "status" | "contextSnapshot" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["avatarSession"]>
+export type AvatarSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignRecipientId" | "recipientLinkId" | "avatarConfigurationId" | "providerSessionId" | "status" | "contextSnapshot" | "startedAt" | "endedAt" | "replyCount" | "lastReplyAt" | "createdAt" | "updatedAt", ExtArgs["result"]["avatarSession"]>
 export type AvatarSessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaignRecipient?: boolean | Prisma.CampaignRecipientDefaultArgs<ExtArgs>
   recipientLink?: boolean | Prisma.AvatarSession$recipientLinkArgs<ExtArgs>
@@ -1151,6 +1293,11 @@ export type $AvatarSessionPayload<ExtArgs extends runtime.Types.Extensions.Inter
     contextSnapshot: runtime.JsonValue | null
     startedAt: Date | null
     endedAt: Date | null
+    /**
+     * RAG replies served in this session, and when the last one started; capped to limit OpenAI spend.
+     */
+    replyCount: number
+    lastReplyAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["avatarSession"]>
@@ -1589,6 +1736,8 @@ export interface AvatarSessionFieldRefs {
   readonly contextSnapshot: Prisma.FieldRef<"AvatarSession", 'Json'>
   readonly startedAt: Prisma.FieldRef<"AvatarSession", 'DateTime'>
   readonly endedAt: Prisma.FieldRef<"AvatarSession", 'DateTime'>
+  readonly replyCount: Prisma.FieldRef<"AvatarSession", 'Int'>
+  readonly lastReplyAt: Prisma.FieldRef<"AvatarSession", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"AvatarSession", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"AvatarSession", 'DateTime'>
 }

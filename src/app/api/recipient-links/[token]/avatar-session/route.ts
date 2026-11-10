@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { buildAvatarContext } from "@/lib/avatar-context";
+import { claimAvatarSessionSlot, releaseAvatarSessionSlot, SESSION_LIMIT_MESSAGE } from "@/lib/rate-limits";
 
 const ANAM_SESSION_TOKEN_URL = "https://api.anam.ai/v1/auth/session-token";
 
@@ -31,6 +32,10 @@ export async function POST(_request: Request, { params }: { params: Promise<{ to
     campaignRecipient: link.campaignRecipient,
   });
 
+  if (!(await claimAvatarSessionSlot(link.id))) {
+    return NextResponse.json({ error: SESSION_LIMIT_MESSAGE, limit: "sessions" }, { status: 429 });
+  }
+
   try {
     const response = await fetch(ANAM_SESSION_TOKEN_URL, {
       method: "POST",
@@ -44,6 +49,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ to
 
     if (!response.ok) {
       console.error("Anam session-token request failed", { status: response.status });
+      await releaseAvatarSessionSlot(link.id);
       return NextResponse.json(
         {
           error: "Unable to prepare the avatar session.",
@@ -55,6 +61,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ to
 
     const body: unknown = await response.json();
     if (!body || typeof body !== "object" || !("sessionToken" in body) || typeof body.sessionToken !== "string") {
+      await releaseAvatarSessionSlot(link.id);
       return NextResponse.json({ error: "Avatar service returned an invalid response." }, { status: 502 });
     }
 
@@ -76,6 +83,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ to
     return NextResponse.json({ sessionId: session.id, sessionToken: body.sessionToken }, { status: 201 });
   } catch (error) {
     console.error("Anam session-token network error", error instanceof Error ? error.name : "unknown");
+    await releaseAvatarSessionSlot(link.id).catch(() => undefined);
     return NextResponse.json({ error: "Unable to prepare the avatar session." }, { status: 502 });
   }
 }
