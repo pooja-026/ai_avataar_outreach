@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { buildConversationRecap, type ConversationTurn } from "@/lib/conversation-recap";
 import { createSemanticSummary } from "@/lib/semantic-summary";
+import { planTranscriptWrite } from "@/lib/transcript";
 
-const MAX_MESSAGES = 100;
+// Well above a full conversation (LIMIT_REPLIES_PER_SESSION replies plus the recipient's turns).
+const MAX_MESSAGES = 400;
 const MAX_CONTENT_LENGTH = 4_000;
 
 type IncomingMessage = { role?: unknown; content?: unknown };
@@ -40,17 +42,24 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
   });
   if (!session) return NextResponse.json({ error: "Conversation session unavailable." }, { status: 404 });
 
-  const insights = ended ? await createSemanticSummary(messages) : null;
-  const recap = insights?.executiveSummary ?? (ended ? buildConversationRecap(messages) : null);
-  const now = new Date();
-  await db.$transaction([
-    db.conversationMessage.deleteMany({ where: { sessionId } }),
-    ...(messages.length
-      ? [db.conversationMessage.createMany({
-          data: messages.map((message, index) => ({ sessionId, sequence: index + 1, role: message.role, content: message.content })),
-        })]
-      : []),
-    db.avatarSession.update({
+  // Lock the session row so concurrent saves are applied one at a time, in order.
+  const write = await db.$transaction(async (tx) => {
+    const [locked] = await tx.$queryRaw<Array<{ status: string }>>`SELECT "status" FROM "AvatarSession" WHERE "id" = ${sessionId}::uuid FOR UPDATE`;
+    if (!locked || locked.status === "ENDED") return { alreadyEnded: true as const };
+
+    const [storedCount, storedLast] = await Promise.all([
+      tx.conversationMessage.count({ where: { sessionId } }),
+      tx.conversationMessage.findFirst({ where: { sessionId }, orderBy: { sequence: "desc" }, select: { sequence: true, role: true, content: true } }),
+    ]);
+    const plan = planTranscriptWrite(storedCount, storedLast, messages);
+    if (plan.updateLast && storedLast) {
+      await tx.conversationMessage.update({ where: { sessionId_sequence: { sessionId, sequence: storedLast.sequence } }, data: { content: plan.updateLast } });
+    }
+    if (plan.append.length) {
+      await tx.conversationMessage.createMany({ data: plan.append.map((turn) => ({ sessionId, sequence: turn.sequence, role: turn.role, content: turn.content })) });
+    }
+    const now = new Date();
+    await tx.avatarSession.update({
       where: { id: sessionId },
       data: {
         status: ended ? "ENDED" : "ACTIVE",
@@ -58,14 +67,27 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
         ...(ended ? { endedAt: now } : {}),
         ...(providerSessionId ? { providerSessionId } : {}),
       },
-    }),
-    ...(recap
-      ? [
-          db.campaignRecipient.update({ where: { id: session.campaignRecipientId }, data: { conversationSummary: recap, ...(insights ? { conversationInsights: insights } : {}), lastConversationAt: now } }),
-          db.recipient.update({ where: { id: session.campaignRecipient.recipientId }, data: { conversationSummary: recap, ...(insights ? { conversationInsights: insights } : {}), lastConversationAt: now } }),
-        ]
-      : []),
-  ]);
+    });
+    return { alreadyEnded: false as const, appended: plan.append.length };
+  });
+
+  // Ending is claimed inside the lock above, so the summary runs once per session.
+  if (write.alreadyEnded) return NextResponse.json({ saved: false, ended: true });
+  if (!ended) return NextResponse.json({ saved: true, appended: write.appended });
+
+  // Summarize the stored transcript, not the client-supplied payload.
+  const transcript = (await db.conversationMessage.findMany({ where: { sessionId }, orderBy: { sequence: "asc" }, select: { role: true, content: true } }))
+    .filter((turn): turn is ConversationTurn => turn.role === "USER" || turn.role === "ASSISTANT");
+  const insights = await createSemanticSummary(transcript);
+  const recap = insights?.executiveSummary ?? buildConversationRecap(transcript);
+  if (recap) {
+    const now = new Date();
+    const data = { conversationSummary: recap, ...(insights ? { conversationInsights: insights } : {}), lastConversationAt: now };
+    await db.$transaction([
+      db.campaignRecipient.update({ where: { id: session.campaignRecipientId }, data }),
+      db.recipient.update({ where: { id: session.campaignRecipient.recipientId }, data }),
+    ]);
+  }
 
   return NextResponse.json({ saved: true, recap });
 }
