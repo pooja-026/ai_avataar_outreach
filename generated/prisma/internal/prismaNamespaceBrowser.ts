@@ -164,6 +164,7 @@ export const RecipientLinkScalarFieldEnum = {
   expiresAt: 'expiresAt',
   lastOpenedAt: 'lastOpenedAt',
   revokedAt: 'revokedAt',
+  sessionCount: 'sessionCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -222,6 +223,8 @@ export const AvatarSessionScalarFieldEnum = {
   contextSnapshot: 'contextSnapshot',
   startedAt: 'startedAt',
   endedAt: 'endedAt',
+  replyCount: 'replyCount',
+  lastReplyAt: 'lastReplyAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

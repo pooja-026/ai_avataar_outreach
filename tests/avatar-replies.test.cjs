@@ -41,6 +41,7 @@ function routeHarness() {
     }) } }) },
     '@/lib/conversation-intent': intent,
     '@/lib/knowledge-processing': { retrieveCampaignKnowledge: async () => { retrievals++; return []; } },
+    '@/lib/rate-limits': { claimReplySlot: async () => 'ok', REPLY_LIMIT_MESSAGE: 'limit' },
   });
   return { calls, get retrievals() { return retrievals; }, reply: (messages) => route.POST(new Request('http://localhost/reply', {
     method: 'POST', body: JSON.stringify({ messages }),

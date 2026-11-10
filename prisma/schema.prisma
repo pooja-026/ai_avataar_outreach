@@ -147,6 +147,8 @@ model RecipientLink {
   expiresAt           DateTime?
   lastOpenedAt        DateTime?
   revokedAt           DateTime?
+  /// Avatar sessions started from this link; capped to limit Anam spend.
+  sessionCount        Int                 @default(0)
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
 
@@ -218,6 +220,9 @@ model AvatarSession {
   contextSnapshot     Json?
   startedAt           DateTime?
   endedAt             DateTime?
+  /// RAG replies served in this session, and when the last one started; capped to limit OpenAI spend.
+  replyCount          Int                 @default(0)
+  lastReplyAt         DateTime?
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
 

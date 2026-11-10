@@ -534,14 +534,6 @@ export type KnowledgeDocumentScalarRelationFilter = {
   isNot?: Prisma.KnowledgeDocumentWhereInput
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type EnumKnowledgeDocumentStatusFieldUpdateOperationsInput = {
   set?: $Enums.KnowledgeDocumentStatus
 }

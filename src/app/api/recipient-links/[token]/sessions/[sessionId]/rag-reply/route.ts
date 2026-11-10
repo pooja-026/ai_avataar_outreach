@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import { directConversationResponse, NO_SOURCE_ANSWER } from "@/lib/conversation-intent";
 import { retrieveCampaignKnowledge } from "@/lib/knowledge-processing";
+import { claimReplySlot, REPLY_LIMIT_MESSAGE } from "@/lib/rate-limits";
 
 type Message = { role: "user" | "persona"; content: string };
 const encoder = new TextEncoder();
@@ -49,6 +50,15 @@ export async function POST(request: Request, { params }: { params: Promise<{ tok
     include: { recipientLink: true, campaignRecipient: { include: { campaign: true, recipient: true } } },
   });
   if (!session || (session.recipientLink?.expiresAt && session.recipientLink.expiresAt <= new Date())) return NextResponse.json({ error: "Invitation unavailable." }, { status: 404 });
+
+  const claim = await claimReplySlot(session);
+  if (claim !== "ok") {
+    // "exhausted" carries a goodbye the avatar speaks; "burst" is dropped silently.
+    return new Response(claim === "exhausted" ? REPLY_LIMIT_MESSAGE : "", {
+      status: 429,
+      headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store", "X-Limit": claim, ...(claim === "burst" ? { "Retry-After": "1" } : {}) },
+    });
+  }
 
   try {
     const directResponse = directConversationResponse(latestQuestion.content);
